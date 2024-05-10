@@ -1,12 +1,12 @@
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEngine.UI;
-    using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-    public class GameManager : MonoBehaviour
-    {
-    private readonly string cookieTag = "Cookie";
+public class CookieManager : MonoBehaviour
+{
+    public static readonly string cookieTag = "Cookie";
 
     public Image[] images;
     public Sprite prefabDoughC;
@@ -58,7 +58,7 @@
 
     public void OnClickTrash()
     {
-        if(tableimage != null)
+        if (tableimage != null)
         {
             tableimage.sprite = null;
             tableimage.gameObject.SetActive(false);
@@ -71,14 +71,14 @@
 
     public void OnClickTableA()
     {
-        if(tableButtonImage != null)
+        if (tableButtonImage != null)
         {
             tableButtonImage.color = Color.white;
         }
         Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         var buttonImage = button.GetComponent<Image>();
         buttonImage.color = Color.red;
-        
+
         tableButtonImage = buttonImage;
         if (button != null)
         {
@@ -155,12 +155,11 @@
 
     IEnumerator StartOven(Image foundImage, Image resultCookie, Sprite temp)
     {
-        foundImage.gameObject.SetActive (true);
+        foundImage.gameObject.SetActive(true);
         yield return new WaitForSeconds(2);
         foundImage.gameObject.SetActive(false);
         resultCookie.gameObject.SetActive(true);
         resultCookie.sprite = temp;
         resultCookie.type = Image.Type.Sliced;
     }
-    
 }
