@@ -8,6 +8,9 @@ public class CookieManager : MonoBehaviour
 {
     public static readonly string cookieTag = "Cookie";
 
+    public static CookieManager Instance { get; private set; }
+    public Image SelectedCookieImage { get; private set; }
+
     public Image[] images;
     public Sprite prefabDoughC;
     public Sprite prefabCookieA;
@@ -16,6 +19,18 @@ public class CookieManager : MonoBehaviour
     private bool resultCookieSelect = false;
     private Image tableimage;
     private Image tableButtonImage;
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void OnClickDoughC()
     {
         for (int i = 0; i < images.Length; i++)
@@ -24,7 +39,7 @@ public class CookieManager : MonoBehaviour
             {
                 images[i].gameObject.SetActive(true);
                 images[i].sprite = prefabDoughC;
-
+                images[i].tag = "Untagged";
                 break;
             }
         }
@@ -127,9 +142,10 @@ public class CookieManager : MonoBehaviour
 
             if (resultCookie != null && resultCookie.gameObject.activeSelf)
             {
+                SelectedCookieImage = resultCookie;
+                Debug.Log(SelectedCookieImage.sprite.name);
                 tableimage = resultCookie;
                 resultCookieSelect = true;
-                return;
             }
             else if (tableimage != null && !resultCookieSelect)
             {
@@ -140,16 +156,11 @@ public class CookieManager : MonoBehaviour
                     {
                         StartCoroutine(StartOven(foundImage, resultCookie, temp));
                     }
-                    else
-                    {
-                        return;
-                    }
                     tableimage.sprite = null;
-                    tableimage.tag = "Untagged";
+                    //tableimage.tag = "Untagged";
                     tableimage.gameObject.SetActive(false);
                 }
             }
-            return;
         }
     }
 
@@ -161,5 +172,12 @@ public class CookieManager : MonoBehaviour
         resultCookie.gameObject.SetActive(true);
         resultCookie.sprite = temp;
         resultCookie.type = Image.Type.Sliced;
+    }
+
+    public void EmptyTableImage()
+    {
+        tableimage.sprite = null;
+        tableimage.tag = "Untagged";
+        tableimage.gameObject.SetActive(false);
     }
 }
