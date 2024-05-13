@@ -8,7 +8,12 @@ public class CustomerManager : MonoBehaviour
     public float minSpawnTime = 12f;
     public float maxSpawnTime = 20f;
 
-    private void Start()
+    private void OnDisable()
+    {
+        foreach (var customer in customers)
+            customer.gameObject.SetActive(false);
+    }
+    private void OnEnable()
     {
         StartCoroutine(SpawnCustomersRandomly());
     }
@@ -20,7 +25,7 @@ public class CustomerManager : MonoBehaviour
             float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
             yield return new WaitForSeconds(waitTime);
 
-            ActivateRandomCustomer();
+            ActivateRandomCustomer();            
         }
     }
 

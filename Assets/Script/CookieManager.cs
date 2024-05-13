@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
 public class CookieManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class CookieManager : MonoBehaviour
     public Image SelectedCookieImage { get; private set; }
 
     public Image[] images;
+    public Image[] ovenImage;
     public Sprite prefabDoughC;
     public Sprite prefabCookieA;
     public Sprite prefabCookieB;
@@ -29,6 +31,23 @@ public class CookieManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnDisable()
+    {
+        foreach(var item in images)
+        {
+            item.sprite = null;
+            item.tag = "Untagged";
+            item.gameObject.SetActive(false);
+        }
+        foreach(var item in ovenImage)
+        {
+            item.sprite = null;
+            item.gameObject.SetActive(false);
+        }
+        tableButtonImage.color = Color.white;
+
     }
     public void OnClickDoughC()
     {
@@ -142,7 +161,6 @@ public class CookieManager : MonoBehaviour
             if (resultCookie != null && resultCookie.gameObject.activeSelf)
             {
                 SelectedCookieImage = resultCookie;
-                Debug.Log(SelectedCookieImage.sprite.name);
                 tableimage = resultCookie;
                 resultCookieSelect = true;
             }
@@ -156,7 +174,6 @@ public class CookieManager : MonoBehaviour
                         StartCoroutine(StartOven(foundImage, resultCookie, temp));
                     }
                     tableimage.sprite = null;
-                    //tableimage.tag = "Untagged";
                     tableimage.gameObject.SetActive(false);
                 }
             }
