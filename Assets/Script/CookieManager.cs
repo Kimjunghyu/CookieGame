@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 public class CookieManager : MonoBehaviour
 {
     public static readonly string cookieTag = "Cookie";
-
     public static CookieManager Instance { get; private set; }
     public Image SelectedCookieImage { get; private set; }
 

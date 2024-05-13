@@ -1,166 +1,76 @@
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEngine.UI;
-    using UnityEngine.EventSystems;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
 
-    public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour
+{
+    public static GameManager instance;
+
+    public TextMeshProUGUI dayText;
+    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI moneyText;
+
+    private int day = 1;
+    private int min = 3;
+    private float second = 0f;
+    public int money = 0;
+    private void Awake()
     {
-    private readonly string cookieTag = "Cookie";
-
-    public Image[] images;
-    public Sprite prefabDoughC;
-    public Sprite prefabCookieA;
-    public Sprite prefabCookieB;
-
-    private bool resultCookieSelect = false;
-    private Image tableimage;
-    private Image tableButtonImage;
-    public void OnClickDoughC()
-    {
-        for (int i = 0; i < images.Length; i++)
+        if (instance == null)
         {
-            if (!images[i].gameObject.activeSelf)
-            {
-                images[i].gameObject.SetActive(true);
-                images[i].sprite = prefabDoughC;
-
-                break;
-            }
-        }
-    }
-
-    public void OnClickToppingCa()
-    {
-        for (int i = 0; i < images.Length; i++)
-        {
-            if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
-            {
-                images[i].sprite = prefabCookieA;
-                images[i].tag = cookieTag;
-                break;
-            }
-        }
-    }
-
-    public void OnClickToppingCb()
-    {
-        for (int i = 0; i < images.Length; i++)
-        {
-            if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
-            {
-                images[i].sprite = prefabCookieB;
-                images[i].tag = cookieTag;
-                break;
-            }
-        }
-    }
-
-    public void OnClickTrash()
-    {
-        if(tableimage != null)
-        {
-            tableimage.sprite = null;
-            tableimage.gameObject.SetActive(false);
+            instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            return;
+            Destroy(gameObject);
         }
     }
-
-    public void OnClickTableA()
+    private void Start()
     {
-        if(tableButtonImage != null)
-        {
-            tableButtonImage.color = Color.white;
-        }
-        Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-        var buttonImage = button.GetComponent<Image>();
-        buttonImage.color = Color.red;
-        
-        tableButtonImage = buttonImage;
-        if (button != null)
-        {
-
-            Image foundImage = null;
-            foreach (Transform child in button.transform)
-            {
-                Image image = child.GetComponent<Image>();
-                if (image != null)
-                {
-                    foundImage = image;
-                    break;
-                }
-            }
-
-            if (foundImage != null)
-            {
-                tableimage = foundImage;
-                resultCookieSelect = false;
-            }
-        }
+        min = 3;
+        second = 60f;
+        timerText.text = string.Format($"{0:D2}:{1:D2}", min, (int)second);
+        dayText.text = $"Day : {day}";
+        moneyText.text = $"Money: ${money}";
     }
-
-    public void OnClickOven()
+    private void Update()
     {
-        Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-        if (button != null)
+        timerText.text = $"{min:D2}:{(int)second:D2}";
+        second -= Time.deltaTime;
+        if (second <= 0)
         {
-            Image foundImage = null;
-            Image resultCookie = null;
-            foreach (Transform child in button.transform)
+            min -= 1;
+            second = 60;
+            if(min <= 0)
             {
-                Image image = child.GetComponent<Image>();
-                if (image != null)
-                {
-                    if (image.tag == cookieTag)
-                    {
-                        resultCookie = image;
-                    }
-                    else
-                    {
-                        foundImage = image;
-                    }
-                }
+                min = 0;
+                second = 0;
+                //day++; (프로토타입 이후 추가예정)
             }
-
-            if (resultCookie != null && resultCookie.gameObject.activeSelf)
-            {
-                tableimage = resultCookie;
-                resultCookieSelect = true;
-                return;
-            }
-            else if (tableimage != null && !resultCookieSelect)
-            {
-                if (tableimage.sprite != null && tableimage.tag == cookieTag)
-                {
-                    Sprite temp = tableimage.sprite;
-                    if (foundImage != null && resultCookie != null)
-                    {
-                        StartCoroutine(StartOven(foundImage, resultCookie, temp));
-                    }
-                    else
-                    {
-                        return;
-                    }
-                    tableimage.sprite = null;
-                    tableimage.tag = "Untagged";
-                    tableimage.gameObject.SetActive(false);
-                }
-            }
-            return;
+            Debug.Log(min);
+            Debug.Log(second);
         }
+
     }
 
-    IEnumerator StartOven(Image foundImage, Image resultCookie, Sprite temp)
+    public void OnClickStop()
     {
-        foundImage.gameObject.SetActive (true);
-        yield return new WaitForSeconds(2);
-        foundImage.gameObject.SetActive(false);
-        resultCookie.gameObject.SetActive(true);
-        resultCookie.sprite = temp;
-        resultCookie.type = Image.Type.Sliced;
+        Time.timeScale = 0f;
     }
-    
+
+    public void OnClickRestart()
+    {
+        Time.timeScale = 1f;
+
+    }
+
+    public void AddMoney(int amount)
+    {
+        money += amount;
+        moneyText.text = $"Money: ${money}";
+    }
 }

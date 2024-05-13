@@ -33,7 +33,6 @@ public class CustomerSetting : MonoBehaviour
         if (cookies.Length > 0)
         {
             cookieImage.sprite = cookies[Random.Range(0, cookies.Length)];
-            Debug.Log("cookieImage.sprite set to: " + cookieImage.sprite.name);
         }
         else
         {
@@ -66,36 +65,18 @@ public class CustomerSetting : MonoBehaviour
     public void OnClickCustomer()
     {
         selectCookie = cookieImage;
-        Debug.Log("ƒÌ≈∞¿Ã∏ß :" + CookieManager.Instance.SelectedCookieImage.sprite.name);
-
         if(selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
         {
             if(selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name)
             {
                 gameObject.SetActive(false);
-                //CookieManager.Instance.EmptyTableImage();
                 CookieManager.Instance.OnClickTrash();
+                GameManager.instance.AddMoney(100);
+            }
+            else
+            {
+                return;
             }
         }
-        //if (CookieManager.Instance != null && CookieManager.Instance.SelectedCookieImage != null && cookieImage.sprite != null)
-        //{
-        //    if (selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.name)
-        //    {
-        //        Debug.Log("cookiename :" + cookieImage.sprite.name);
-        //        Debug.Log("managername: " + CookieManager.Instance.SelectedCookieImage.name);
-        //        gameObject.SetActive(false);
-        //        //CookieManager.Instance.EmptyTableImage();
-        //    }
-        //}
-        //if (CookieManager.Instance == null)
-        //{
-        //    Debug.LogError("CookieManager.Instance == null");
-        //}
-        //if (CookieManager.Instance.SelectedCookieImage.sprite.name == null)
-        //{
-        //    Debug.LogError("CookieManager.Instance.SelectedCookieImage == null");
-        //}
-        //Debug.Log("SelectCookie : " + selectCookie.sprite.name);
-        return;
     }
 }
