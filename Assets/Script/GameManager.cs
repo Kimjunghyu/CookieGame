@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     public Button stopButton;
     public GameObject title;
     public GameObject inGame;
+    public Image startImage;
+    public Sprite ready;
+    public Sprite go;
 
     public TextMeshProUGUI dayText;
     public TextMeshProUGUI timerText;
@@ -24,6 +27,7 @@ public class GameManager : MonoBehaviour
     public int money = 0;
 
     public bool gameOver = false;
+    private bool isPlaying = false;
     private void Awake()
     {
         Time.timeScale = 0f;
@@ -41,32 +45,39 @@ public class GameManager : MonoBehaviour
     {
         min = 3;
         second = 60f;
-        timerText.text = string.Format($"{0:D2}:{1:D2}", min, (int)second);
+        timerText.text = $"{min:D2}:{(int)second:D2}";
         dayText.text = $"Day : {day}";
         moneyText.text = $"Money: ${money}";
     }
     private void Update()
     {
-        timerText.text = $"{min:D2}:{(int)second:D2}";
-        second -= Time.deltaTime;
-        if (second <= 0)
+        if(isPlaying)
         {
-            min -= 1;
-            second = 60;
-            if (min <= 0)
+            timerText.text = $"{min:D2}:{(int)second:D2}";
+            second -= Time.deltaTime;
+            if (second <= 0)
             {
-                min = 0;
-                second = 0;
-                //day++; (프로토타입 이후 추가예정)
-                gameOver = true;
+                min -= 1;
+                second = 60;
+                if (min <= 0)
+                {
+                    min = 0;
+                    second = 0;
+                    //day++; (프로토타입 이후 추가예정)
+                    gameOver = true;
+                }
             }
         }
+        
         if(gameOver)
         {
             Reset();
-            
+            isPlaying = false;
         }
-        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEditor.EditorApplication.isPlaying = false;
+        }
     }
 
     public void OnClickStop()
@@ -76,24 +87,24 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0f;
             pause.SetActive(true);
             stopButton.interactable = false;
-
+            isPlaying = false;
         }
     }
 
-    public void OnClickRestart()
+    public void OnClickResume()
     {
         if(pause.activeSelf)
         {
             Time.timeScale = 1f;
             pause.SetActive(false);
             stopButton.interactable = true;
+            isPlaying = true;
         }
     }
 
     public void OnClickQuit()
     {
 #if UNITY_EDITOR
-      //  UnityEditor.EditorApplication.isPlaying = false;
         if(!title.activeSelf)
         {
             title.SetActive(true);
@@ -115,16 +126,19 @@ public class GameManager : MonoBehaviour
 
     public void OnClickStart()
     {
+        timerText.text = $"{min:D2}:{(int)second:D2}";
+        if (title.activeSelf)
+        {
+            gameOver = false;
+            title.SetActive(false);
+            stopButton.interactable = true;
+        }
+        StartCoroutine(StartMessage());
         if (!inGame.activeSelf)
         {
             inGame.SetActive(true);
             Time.timeScale = 1f;
-            if (title.activeSelf)
-            {
-                gameOver = false;
-                title.SetActive(false);
-                stopButton.interactable = true;
-            }
+           
         }
     }
 
@@ -141,4 +155,14 @@ public class GameManager : MonoBehaviour
 
     }
 
+    private IEnumerator StartMessage()
+    {
+        startImage.gameObject.SetActive(true);
+        startImage.sprite = ready;
+        yield return new WaitForSeconds(1);
+        startImage.sprite = go;
+        yield return new WaitForSeconds(1);
+        startImage.gameObject.SetActive(false);
+        isPlaying = true;
+    }
 }

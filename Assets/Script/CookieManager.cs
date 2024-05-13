@@ -46,7 +46,10 @@ public class CookieManager : MonoBehaviour
             item.sprite = null;
             item.gameObject.SetActive(false);
         }
-        tableButtonImage.color = Color.white;
+        if(tableButtonImage != null)
+        {
+            tableButtonImage.color = Color.white;
+        }
 
     }
     public void OnClickDoughC()
