@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
+
         if(isPlaying)
         {
             timerText.text = $"{min:D2}:{(int)second:D2}";

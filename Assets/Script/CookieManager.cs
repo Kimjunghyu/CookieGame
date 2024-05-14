@@ -3,10 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using static UnityEditor.Progress;
 
 public class CookieManager : MonoBehaviour
 {
+    public enum SelectionMode
+    {
+        Auto,
+        Select
+    }
+
+    private SelectionMode selectionMode = SelectionMode.Auto;
+
     public static readonly string cookieTag = "Cookie";
     public static CookieManager Instance { get; private set; }
     public Image SelectedCookieImage { get; private set; }
@@ -25,7 +32,6 @@ public class CookieManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -33,6 +39,20 @@ public class CookieManager : MonoBehaviour
         }
     }
 
+    public void Start()
+    {
+        bool autoSelect = PlayerPrefs.GetInt("AutoToggle",1) == 1;
+        if (autoSelect)
+        {
+            selectionMode = SelectionMode.Auto;
+            Debug.Log("Auto mode is selected");
+        }
+        else
+        {
+            selectionMode = SelectionMode.Select;
+            Debug.Log("Manual mode is selected");
+        }
+    }
     private void OnDisable()
     {
         foreach(var item in images)
@@ -52,42 +72,90 @@ public class CookieManager : MonoBehaviour
         }
 
     }
+
+    public void SetSelectionMode(SelectionMode mode)
+    {
+        selectionMode = mode;
+    }
+
     public void OnClickDoughC()
     {
-        for (int i = 0; i < images.Length; i++)
+        if(selectionMode == SelectionMode.Auto)
         {
-            if (!images[i].gameObject.activeSelf)
+            for (int i = 0; i < images.Length; i++)
             {
-                images[i].gameObject.SetActive(true);
-                images[i].sprite = prefabDoughC;
-                images[i].tag = "Untagged";
-                break;
+                if (!images[i].gameObject.activeSelf)
+                {
+                    images[i].gameObject.SetActive(true);
+                    images[i].sprite = prefabDoughC;
+                    images[i].tag = "Untagged";
+                    break;
+                }
+            }
+        }
+       else
+        {
+            if(tableimage != null)
+            {
+                tableimage.gameObject.SetActive(true);
+                tableimage.sprite = prefabDoughC;
+                tableimage.tag = "Untagged";
             }
         }
     }
 
     public void OnClickToppingCa()
     {
-        for (int i = 0; i < images.Length; i++)
+        if(selectionMode == SelectionMode.Auto)
         {
-            if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+            for (int i = 0; i < images.Length; i++)
             {
-                images[i].sprite = prefabCookieA;
-                images[i].tag = cookieTag;
-                break;
+                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                {
+                    images[i].sprite = prefabCookieA;
+                    images[i].tag = cookieTag;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            if (tableimage != null)
+            {
+                if(tableimage.gameObject.activeSelf && tableimage.tag != cookieTag)
+                {
+                    tableimage.sprite = prefabCookieA;
+                    tableimage.tag = cookieTag;
+                } 
+              
             }
         }
     }
 
     public void OnClickToppingCb()
     {
-        for (int i = 0; i < images.Length; i++)
+        if(selectionMode == SelectionMode.Auto)
         {
-            if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+            for (int i = 0; i < images.Length; i++)
             {
-                images[i].sprite = prefabCookieB;
-                images[i].tag = cookieTag;
-                break;
+                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                {
+                    images[i].sprite = prefabCookieB;
+                    images[i].tag = cookieTag;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            if (tableimage != null)
+            {
+                if (tableimage.gameObject.activeSelf && tableimage.tag != cookieTag)
+                {
+                    tableimage.sprite = prefabCookieB;
+                    tableimage.tag = cookieTag;
+                }
+
             }
         }
     }
@@ -183,7 +251,7 @@ public class CookieManager : MonoBehaviour
         }
     }
 
-    IEnumerator StartOven(Image foundImage, Image resultCookie, Sprite temp)
+    private IEnumerator StartOven(Image foundImage, Image resultCookie, Sprite temp)
     {
         foundImage.gameObject.SetActive(true);
         yield return new WaitForSeconds(2);

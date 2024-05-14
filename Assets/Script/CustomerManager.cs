@@ -13,6 +13,7 @@ public class CustomerManager : MonoBehaviour
         foreach (var customer in customers)
             customer.gameObject.SetActive(false);
     }
+
     private void OnEnable()
     {
         StartCoroutine(SpawnCustomersRandomly());
@@ -22,10 +23,10 @@ public class CustomerManager : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitForSeconds(3);
+            ActivateRandomCustomer();
             float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
             yield return new WaitForSeconds(waitTime);
-
-            ActivateRandomCustomer();            
         }
     }
 

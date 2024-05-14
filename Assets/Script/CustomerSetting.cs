@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class CustomerSetting : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class CustomerSetting : MonoBehaviour
     public Sprite[] cookies;
     public Image customerImage;
     public Sprite lowTimerSprite;
+
+    private Image[] customer;
+    public TextMeshProUGUI coin;
 
     public float speed;
     public Sprite maxValueImage;
@@ -25,9 +29,12 @@ public class CustomerSetting : MonoBehaviour
     }
     private void OnEnable()
     {
+        customer = GetComponentsInChildren<Image>();
+
         speed = Random.Range(4, 8);
         customerImage.sprite = customerImages[Random.Range(0, customerImages.Length)];
         slider = GetComponentInChildren<Slider>();
+        slider.gameObject.SetActive(true);
         slider.value = slider.maxValue;
         slider.fillRect.GetComponentInChildren<Image>().sprite = maxValueImage;
         if (cookies.Length > 0)
@@ -69,7 +76,12 @@ public class CustomerSetting : MonoBehaviour
         {
             if(selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name)
             {
-                gameObject.SetActive(false);
+                foreach (var go in customer)
+                {
+                    go.gameObject.SetActive(false);
+                }
+                StartCoroutine(PrintCoin());
+
                 CookieManager.Instance.OnClickTrash();
                 GameManager.instance.AddMoney(100);
             }
@@ -78,5 +90,18 @@ public class CustomerSetting : MonoBehaviour
                 return;
             }
         }
+    }
+
+    private IEnumerator PrintCoin()
+    {
+        coin.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1);
+        coin.gameObject.SetActive(false);
+        foreach (var go in customer)
+        {
+            go.gameObject.SetActive(true);
+        }
+        slider.gameObject.SetActive(true);
+        gameObject.SetActive(false);
     }
 }
