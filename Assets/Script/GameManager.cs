@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public int money = 0;
 
     public bool gameOver = false;
-    private bool isPlaying = false;
+    public bool isPlaying { get; private set; }
     private void Awake()
     {
         Time.timeScale = 0f;
@@ -56,17 +56,18 @@ public class GameManager : MonoBehaviour
         {
             timerText.text = $"{min:D2}:{(int)second:D2}";
             second -= Time.deltaTime;
-            if (second <= 0)
+            if (second <= 0 && min < 0)
             {
                 min -= 1;
                 second = 60;
-                if (min <= 0)
-                {
-                    min = 0;
-                    second = 0;
-                    //day++; (프로토타입 이후 추가예정)
-                    gameOver = true;
-                }
+                
+            }
+            if (min <= 0 && second <= 0)
+            {
+                min = 0;
+                second = 0;
+                //day++; (프로토타입 이후 추가예정)
+                gameOver = true;
             }
         }
         
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
         {
             Reset();
             isPlaying = false;
+            OnClickQuit();
         }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
@@ -83,7 +85,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickStop()
     {
-        if(!pause.activeSelf)
+        if(!pause.activeSelf && isPlaying)
         {
             Time.timeScale = 0f;
             pause.SetActive(true);
@@ -158,6 +160,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator StartMessage()
     {
+        isPlaying = false;
         startImage.gameObject.SetActive(true);
         startImage.sprite = ready;
         yield return new WaitForSeconds(1);

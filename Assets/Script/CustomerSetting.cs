@@ -74,22 +74,19 @@ public class CustomerSetting : MonoBehaviour
         selectCookie = cookieImage;
         if(selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
         {
-            if(selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name)
+            if(selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
             {
                 foreach (var go in customer)
                 {
                     go.gameObject.SetActive(false);
                 }
                 StartCoroutine(PrintCoin());
-
                 CookieManager.Instance.OnClickTrash();
                 GameManager.instance.AddMoney(100);
             }
-            else
-            {
-                return;
-            }
+            
         }
+        return;
     }
 
     private IEnumerator PrintCoin()
