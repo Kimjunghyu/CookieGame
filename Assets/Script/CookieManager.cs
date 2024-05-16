@@ -1,18 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class CookieManager : MonoBehaviour
 {
-    public enum SelectionMode
-    {
-        Auto,
-        Select
-    }
-
-    private SelectionMode selectionMode = SelectionMode.Auto;
 
     public static readonly string cookieTag = "Cookie";
     public static CookieManager Instance { get; private set; }
@@ -41,19 +33,6 @@ public class CookieManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    public void OnEnable()
-    {
-        bool autoSelect = PlayerPrefs.GetInt("AutoToggle",1) == 1;
-        if (autoSelect)
-        {
-            selectionMode = SelectionMode.Auto;
-        }
-        else
-        {
-            selectionMode = SelectionMode.Select;
-        }
-    }
     private void OnDisable()
     {
         foreach(var item in images)
@@ -71,21 +50,16 @@ public class CookieManager : MonoBehaviour
         {
             tableButtonImage.color = Color.white;
         }
-
     }
 
     private void Update()
     {
         isPlaying = GameManager.instance.isPlaying;
     }
-    public void SetSelectionMode(SelectionMode mode)
-    {
-        selectionMode = mode;
-    }
 
     public void OnClickDoughC()
     {
-        if(selectionMode == SelectionMode.Auto && isPlaying)
+        if(isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
@@ -98,20 +72,13 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-       else
-        {
-            if(tableimage != null && tableimage.tag != cookieTag && buttonImage.color != Color.white && isPlaying)
-            {
-                tableimage.gameObject.SetActive(true);
-                tableimage.sprite = prefabDoughC;
-                tableimage.tag = "Untagged";
-            }
-        }
+
+        return;
     }
 
     public void OnClickToppingCa()
     {
-        if(selectionMode == SelectionMode.Auto && isPlaying)
+        if(isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
@@ -123,23 +90,12 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            if (tableimage != null && isPlaying)
-            {
-                if(tableimage.gameObject.activeSelf && tableimage.tag != cookieTag)
-                {
-                    tableimage.sprite = prefabCookieA;
-                    tableimage.tag = cookieTag;
-                } 
-              
-            }
-        }
+        return;
     }
 
     public void OnClickToppingCb()
     {
-        if(selectionMode == SelectionMode.Auto && isPlaying)
+        if(isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
@@ -151,18 +107,7 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            if (tableimage != null && isPlaying)
-            {
-                if (tableimage.gameObject.activeSelf && tableimage.tag != cookieTag)
-                {
-                    tableimage.sprite = prefabCookieB;
-                    tableimage.tag = cookieTag;
-                }
-
-            }
-        }
+        return;
     }
 
     public void OnClickTrash()
@@ -176,10 +121,7 @@ public class CookieManager : MonoBehaviour
                 tableimage.tag = "Untagged";
             }
         }
-        else
-        {
-            return;
-        }
+        return;
     }
 
     public void OnClickTableA()
@@ -209,10 +151,23 @@ public class CookieManager : MonoBehaviour
                         break;
                     }
                 }
-
                 if (foundImage != null)
                 {
+
                     tableimage = foundImage;
+
+                    for (int i = 0; i < ovenImage.Length; ++i)
+                    {
+                        if (!ovenImage[i].gameObject.activeSelf && foundImage.tag == cookieTag)
+                        {
+                            ovenImage[i].gameObject.SetActive(true);
+                            ovenImage[i].sprite = foundImage.sprite;
+                            tableimage.sprite = null;
+                            tableimage.tag = "Untagged";
+                            tableimage.gameObject.SetActive(false);
+                            break;
+                        }
+                    }
 
                 }
                 else
@@ -284,7 +239,7 @@ public class CookieManager : MonoBehaviour
         foundImage.gameObject.SetActive(false);
         resultCookie.gameObject.SetActive(true);
         resultCookie.sprite = temp;
-        resultCookie.type = Image.Type.Sliced;
+        resultCookie.type = Image.Type.Simple;
     }
 
     public void EmptyTableImage()

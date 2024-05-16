@@ -1,10 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
-using UnityEditor.Build;
 
 public class GameManager : MonoBehaviour
 {
@@ -56,7 +53,7 @@ public class GameManager : MonoBehaviour
         {
             timerText.text = $"{min:D2}:{(int)second:D2}";
             second -= Time.deltaTime;
-            if (second <= 0 && min < 0)
+            if (second <= 0)
             {
                 min -= 1;
                 second = 60;
@@ -67,19 +64,19 @@ public class GameManager : MonoBehaviour
                 min = 0;
                 second = 0;
                 //day++; (프로토타입 이후 추가예정)
+                Reset();
+                isPlaying = false;
+                //OnClickQuit();
+                if (!title.activeSelf)
+                {
+                    title.SetActive(true);
+                    pause.SetActive(false);
+                    inGame.SetActive(false);
+
+                    gameOver = true;
+                }
                 gameOver = true;
             }
-        }
-        
-        if(gameOver)
-        {
-            Reset();
-            isPlaying = false;
-            OnClickQuit();
-        }
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            UnityEditor.EditorApplication.isPlaying = false;
         }
     }
 
