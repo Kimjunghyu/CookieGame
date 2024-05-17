@@ -51,7 +51,7 @@ public class CustomerSetting : MonoBehaviour
     {
         slider.value -= speed * Time.deltaTime;
 
-        if(slider.value <= 30 )
+        if(slider.value <= 19 )
         {
             SetSliderSprite();
         }

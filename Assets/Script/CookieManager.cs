@@ -5,12 +5,12 @@ using UnityEngine.EventSystems;
 
 public class CookieManager : MonoBehaviour
 {
-
     public static readonly string cookieTag = "Cookie";
     public static CookieManager Instance { get; private set; }
     public Image SelectedCookieImage { get; set; }
     public bool resultCookieSelect { get; private set; }
 
+    public Slider[] timers;
     public Image[] images;
     public Image[] ovenImage;
     public Sprite prefabDoughC;
@@ -158,13 +158,12 @@ public class CookieManager : MonoBehaviour
 
                     for (int i = 0; i < ovenImage.Length; ++i)
                     {
-                        if (!ovenImage[i].gameObject.activeSelf && foundImage.tag == cookieTag)
+                        if (!ovenImage[i].gameObject.activeSelf && foundImage.tag == cookieTag && !timers[i].gameObject.activeSelf)
                         {
-                            ovenImage[i].gameObject.SetActive(true);
-                            ovenImage[i].sprite = foundImage.sprite;
-                            tableimage.sprite = null;
-                            tableimage.tag = "Untagged";
-                            tableimage.gameObject.SetActive(false);
+                            StartCoroutine(StartTimer(i, ovenImage[i],tableimage));
+                            //ovenImage[i].gameObject.SetActive(true);
+                            //ovenImage[i].sprite = foundImage.sprite;
+
                             break;
                         }
                     }
@@ -178,6 +177,30 @@ public class CookieManager : MonoBehaviour
         }
     }
 
+    private IEnumerator StartTimer(int index, Image ovenImage, Image resultImage)
+    {
+        Debug.Log("Timer Start");  // 디버그 로그 추가
+        var temp = resultImage;
+        tableimage.sprite = null;
+        tableimage.tag = "Untagged";
+        tableimage.gameObject.SetActive(false);
+        timers[index].gameObject.SetActive(true);
+        timers[index].value = 100;
+
+        // 타이머가 0이 될 때까지 기다리기
+        while (timers[index].value > 0)
+        {
+            timers[index].value -= 10 * Time.deltaTime;
+            yield return null;  // 한 프레임 대기
+        }
+
+        // 타이머 종료 후의 로직 실행
+        timers[index].gameObject.SetActive(false);
+        ovenImage.gameObject.SetActive(true);
+        ovenImage.sprite = resultImage.sprite;
+
+        Debug.Log("Timer End");  // 디버그 로그 추가
+    }
     public void OnClickOven()
     {
         if (isPlaying)
