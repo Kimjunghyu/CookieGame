@@ -5,8 +5,8 @@ using UnityEngine;
 public class CustomerManager : MonoBehaviour
 {
     public GameObject[] customers;
-    public float minSpawnTime = 20f;
-    public float maxSpawnTime = 30f;
+    public float minSpawnTime = 5f;
+    public float maxSpawnTime = 8f;
 
     private void OnDisable()
     {

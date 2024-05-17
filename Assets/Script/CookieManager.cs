@@ -21,6 +21,7 @@ public class CookieManager : MonoBehaviour
     private Image tableButtonImage;
     private Image buttonImage;
 
+    private Image tempImage;
     private bool isPlaying = false;
     private void Awake()
     {
@@ -160,7 +161,8 @@ public class CookieManager : MonoBehaviour
                     {
                         if (!ovenImage[i].gameObject.activeSelf && foundImage.tag == cookieTag && !timers[i].gameObject.activeSelf)
                         {
-                            StartCoroutine(StartTimer(i, ovenImage[i],tableimage));
+                            tempImage = foundImage;
+                            StartCoroutine(StartTimer(i, ovenImage[i], tempImage));
                             //ovenImage[i].gameObject.SetActive(true);
                             //ovenImage[i].sprite = foundImage.sprite;
 
@@ -179,7 +181,9 @@ public class CookieManager : MonoBehaviour
 
     private IEnumerator StartTimer(int index, Image ovenImage, Image resultImage)
     {
-        Debug.Log("Timer Start");  // 디버그 로그 추가
+        ovenImage.gameObject.SetActive(true);
+        ovenImage.sprite = resultImage.sprite;
+        ovenImage.gameObject.SetActive(false);
         var temp = resultImage;
         tableimage.sprite = null;
         tableimage.tag = "Untagged";
@@ -187,19 +191,15 @@ public class CookieManager : MonoBehaviour
         timers[index].gameObject.SetActive(true);
         timers[index].value = 100;
 
-        // 타이머가 0이 될 때까지 기다리기
         while (timers[index].value > 0)
         {
-            timers[index].value -= 10 * Time.deltaTime;
-            yield return null;  // 한 프레임 대기
+            timers[index].value -= 30 * Time.deltaTime;
+            yield return null;
         }
 
-        // 타이머 종료 후의 로직 실행
         timers[index].gameObject.SetActive(false);
         ovenImage.gameObject.SetActive(true);
-        ovenImage.sprite = resultImage.sprite;
-
-        Debug.Log("Timer End");  // 디버그 로그 추가
+        //ovenImage.sprite = temp.sprite;
     }
     public void OnClickOven()
     {
@@ -240,11 +240,6 @@ public class CookieManager : MonoBehaviour
                 {
                     if (tableimage.sprite != null && tableimage.tag == cookieTag)
                     {
-                        Sprite temp = tableimage.sprite;
-                        if (foundImage != null && resultCookie != null)
-                        {
-                            StartCoroutine(StartOven(foundImage, resultCookie, temp));
-                        }
                         tableimage.sprite = null;
                         tableimage.tag = "Untagged";
                         tableimage.gameObject.SetActive(false);
@@ -253,16 +248,6 @@ public class CookieManager : MonoBehaviour
             }
         }
       
-    }
-
-    private IEnumerator StartOven(Image foundImage, Image resultCookie, Sprite temp)
-    {
-        foundImage.gameObject.SetActive(true);
-        yield return new WaitForSeconds(2);
-        foundImage.gameObject.SetActive(false);
-        resultCookie.gameObject.SetActive(true);
-        resultCookie.sprite = temp;
-        resultCookie.type = Image.Type.Simple;
     }
 
     public void EmptyTableImage()

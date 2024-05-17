@@ -19,12 +19,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI moneyText;
 
     private int day = 1;
-    private int min = 3;
     private float second = 0f;
     public int money = 0;
-
+    private int stage = 0;
     public bool gameOver = false;
     public bool isPlaying { get; private set; }
+
     private void Awake()
     {
         Time.timeScale = 0f;
@@ -38,51 +38,31 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     private void Start()
     {
-        min = 3;
-        second = 60f;
-        timerText.text = $"{min:D2}:{(int)second:D2}";
-        dayText.text = $"Day : {day}";
-        moneyText.text = $"Money: ${money}";
+        SetStageTimer(day);
+        UpdateUI();
     }
+
     private void Update()
     {
-
-        if(isPlaying)
+        if (isPlaying)
         {
-            timerText.text = $"{min:D2}:{(int)second:D2}";
+            timerText.text = $"{(int)second / 60:D2}:{(int)second % 60:D2}";
             second -= Time.deltaTime;
             if (second <= 0)
             {
-                min -= 1;
-                second = 60;
-                
-            }
-            if (min <= 0 && second <= 0)
-            {
-                min = 0;
-                second = 0;
-                //day++; (프로토타입 이후 추가예정)
-                Reset();
-                isPlaying = false;
-                //OnClickQuit();
-                if (!title.activeSelf)
-                {
-                    title.SetActive(true);
-                    pause.SetActive(false);
-                    inGame.SetActive(false);
-
-                    gameOver = true;
-                }
-                gameOver = true;
+                day++;
+                SetStageTimer(day);
+                UpdateUI();
             }
         }
     }
 
     public void OnClickStop()
     {
-        if(!pause.activeSelf && isPlaying)
+        if (!pause.activeSelf && isPlaying)
         {
             Time.timeScale = 0f;
             pause.SetActive(true);
@@ -93,7 +73,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickResume()
     {
-        if(pause.activeSelf)
+        if (pause.activeSelf)
         {
             Time.timeScale = 1f;
             pause.SetActive(false);
@@ -105,7 +85,7 @@ public class GameManager : MonoBehaviour
     public void OnClickQuit()
     {
 #if UNITY_EDITOR
-        if(!title.activeSelf)
+        if (!title.activeSelf)
         {
             title.SetActive(true);
             pause.SetActive(false);
@@ -116,17 +96,16 @@ public class GameManager : MonoBehaviour
 #else
         Application.Quit();
 #endif
-
     }
+
     public void AddMoney(int amount)
     {
         money += amount;
-        moneyText.text = $"Money: ${money}";
+        moneyText.text = $"${money}";
     }
 
     public void OnClickStart()
     {
-        timerText.text = $"{min:D2}:{(int)second:D2}";
         if (title.activeSelf)
         {
             gameOver = false;
@@ -138,21 +117,66 @@ public class GameManager : MonoBehaviour
         {
             inGame.SetActive(true);
             Time.timeScale = 1f;
-           
         }
+    }
+
+    private void SetStageTimer(int day)
+    {
+        if(day <= 2)
+        {
+            stage = 1;
+        }
+        else if(day <=5)
+        {
+            stage = 2;
+        }
+        else if(day <= 9)
+        {
+            stage = 3;
+        }
+        else if(day <= 14)
+        {
+            stage = 4;
+        }
+        else if(day <= 20)
+        {
+            stage = 5;
+        }
+        else if(day <= 24)
+        {
+            stage = 6;
+        }
+        else
+        {
+            stage = 7;
+        }
+     
+        StageData stageData = StageDataLoad.instance.GetStageData(stage - 1);
+        if (stageData != null)
+        {
+            second = stageData.stageTimer;
+        }
+        else
+        {
+            Debug.LogError("스테이지 데이터 불러오기x.");
+            second = 180;
+        }
+    }
+
+    private void UpdateUI()
+    {
+        timerText.text = $"{(int)second / 60:D2}:{(int)second % 60:D2}";
+        dayText.text = $"Day : {day}";
+        moneyText.text = $"${money}";
     }
 
     private void Reset()
     {
         Time.timeScale = 0f;
         day = 1;
-        min = 3;
-        second = 60f;
+        SetStageTimer(day);
         money = 0;
-        timerText.text = string.Format($"{0:D2}:{1:D2}", min, (int)second);
-        dayText.text = $"Day : {day}";
-        moneyText.text = $"Money: ${money}";
-
+        UpdateUI();
     }
 
     private IEnumerator StartMessage()
