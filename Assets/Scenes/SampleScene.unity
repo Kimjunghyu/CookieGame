@@ -4188,8 +4188,13 @@ MonoBehaviour:
       m_Calls: []
   m_text: '!@#!@#!@#'
   m_isRightToLeft: 0
+<<<<<<< HEAD
+  m_fontAsset: {fileID: 11400000, guid: 3cb9e3180fba1394e905b623471fc2c6, type: 2}
+  m_sharedMaterial: {fileID: -1631596422574026493, guid: 3cb9e3180fba1394e905b623471fc2c6, type: 2}
+=======
   m_fontAsset: {fileID: 11400000, guid: cc48b020f5c3513469441dc7f7ed350e, type: 2}
   m_sharedMaterial: {fileID: 3612937605449141692, guid: cc48b020f5c3513469441dc7f7ed350e, type: 2}
+>>>>>>> parent of 93ee204 (오븐 일정시간 쿠키 존재 시 상태 변경 추가, 결과창 출력)
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5327,8 +5332,13 @@ MonoBehaviour:
       m_Calls: []
   m_text: Start
   m_isRightToLeft: 0
+<<<<<<< HEAD
+  m_fontAsset: {fileID: 11400000, guid: 3cb9e3180fba1394e905b623471fc2c6, type: 2}
+  m_sharedMaterial: {fileID: -1631596422574026493, guid: 3cb9e3180fba1394e905b623471fc2c6, type: 2}
+=======
   m_fontAsset: {fileID: 11400000, guid: cc48b020f5c3513469441dc7f7ed350e, type: 2}
   m_sharedMaterial: {fileID: 3612937605449141692, guid: cc48b020f5c3513469441dc7f7ed350e, type: 2}
+>>>>>>> parent of 93ee204 (오븐 일정시간 쿠키 존재 시 상태 변경 추가, 결과창 출력)
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
