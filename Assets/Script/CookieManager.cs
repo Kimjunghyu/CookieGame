@@ -11,6 +11,8 @@ public class CookieManager : MonoBehaviour
     public bool resultCookieSelect { get; private set; }
 
     public Slider[] timers;
+    public Slider[] burntTimer;
+
     public Image[] images;
     public Image[] ovenImage;
     public Sprite prefabDoughC;
@@ -52,6 +54,10 @@ public class CookieManager : MonoBehaviour
         {
             tableButtonImage.color = Color.white;
         }
+        foreach (var item in burntTimer)
+            item.gameObject.SetActive(false);
+        foreach (var item in timers)
+            item.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -197,10 +203,23 @@ public class CookieManager : MonoBehaviour
 
         timers[index].gameObject.SetActive(false);
         ovenImage.gameObject.SetActive(true);
+        StartCoroutine(StartBurnt(index, ovenImage));
         //ovenImage.sprite = temp.sprite;
     }
 
+    private IEnumerator StartBurnt(int index, Image ovenImage)
+    {
+        burntTimer[index].gameObject.SetActive(true);
+        burntTimer[index].value = 100;
 
+        while (burntTimer[index].value > 0)
+        {
+            burntTimer[index].value -= 30 * Time.deltaTime;
+            yield return null;
+        }
+        ovenImage.sprite = burntCookie;
+        burntTimer[index].gameObject.SetActive(false);
+    }
     public void OnClickOven()
     {
         if (isPlaying)
