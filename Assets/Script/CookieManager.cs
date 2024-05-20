@@ -16,6 +16,7 @@ public class CookieManager : MonoBehaviour
     public Sprite prefabDoughC;
     public Sprite prefabCookieA;
     public Sprite prefabCookieB;
+    public Sprite burntCookie;
 
     private Image tableimage;
     private Image tableButtonImage;
@@ -163,9 +164,6 @@ public class CookieManager : MonoBehaviour
                         {
                             tempImage = foundImage;
                             StartCoroutine(StartTimer(i, ovenImage[i], tempImage));
-                            //ovenImage[i].gameObject.SetActive(true);
-                            //ovenImage[i].sprite = foundImage.sprite;
-
                             break;
                         }
                     }
@@ -201,6 +199,8 @@ public class CookieManager : MonoBehaviour
         ovenImage.gameObject.SetActive(true);
         //ovenImage.sprite = temp.sprite;
     }
+
+
     public void OnClickOven()
     {
         if (isPlaying)

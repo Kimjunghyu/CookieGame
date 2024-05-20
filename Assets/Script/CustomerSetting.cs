@@ -20,6 +20,9 @@ public class CustomerSetting : MonoBehaviour
     public Image cookieImage;
     private Slider slider;
     private Image selectCookie;
+
+    private int addCoin;
+    private int repute;
     private void Start()
     {
         if(!gameObject.activeSelf)
@@ -80,18 +83,54 @@ public class CustomerSetting : MonoBehaviour
                 {
                     go.gameObject.SetActive(false);
                 }
-                StartCoroutine(PrintCoin());
+                addCoin = 100;
+                repute = 1;
+                GameManager.instance.SetRepute(repute);
+                GameManager.instance.AddMoney(addCoin);
+                StartCoroutine(PrintCoin(addCoin, repute));
                 CookieManager.Instance.OnClickTrash();
-                GameManager.instance.AddMoney(100);
             }
-            
+            else if(CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
+            {
+                foreach (var go in customer)
+                {
+                    go.gameObject.SetActive(false);
+                }
+                addCoin = 10;
+                repute = -1;
+                GameManager.instance.SetRepute(repute);
+                GameManager.instance.AddMoney(addCoin);
+                StartCoroutine(PrintCoin(addCoin, repute));
+                CookieManager.Instance.OnClickTrash();
+            }
+            else
+            {
+                foreach (var go in customer)
+                {
+                    go.gameObject.SetActive(false);
+                }
+                addCoin = 50;
+                repute = -1;
+                GameManager.instance.SetRepute(repute);
+                GameManager.instance.AddMoney(addCoin);
+                StartCoroutine(PrintCoin(addCoin,repute));
+                CookieManager.Instance.OnClickTrash();
+            }
         }
         return;
     }
 
-    private IEnumerator PrintCoin()
+    private IEnumerator PrintCoin(int coinvalue, int reputevalue)
     {
         coin.gameObject.SetActive(true);
+        if(reputevalue > 0)
+        {
+            coin.text = $"+{coinvalue}\n+{reputevalue}";
+        }
+        else
+        {
+            coin.text = $"+{coinvalue}\n{reputevalue}";
+        }
         yield return new WaitForSeconds(1);
         coin.gameObject.SetActive(false);
         foreach (var go in customer)

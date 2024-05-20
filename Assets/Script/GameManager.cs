@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Button stopButton;
     public GameObject title;
     public GameObject inGame;
+    public GameObject result;
+
     public Image startImage;
     public Sprite ready;
     public Sprite go;
@@ -18,12 +21,15 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI moneyText;
 
-    private int day = 1;
+    public int day { get; set; }
+    public int totalMoney { get; set; }
+    public int repute {  get; set; }
+
     private float second = 0f;
-    public int money = 0;
+    public int money { get; set; }
     private int stage = 0;
     public bool gameOver = false;
-    public bool isPlaying { get; private set; }
+    public bool isPlaying { get; set; }
 
     private void Awake()
     {
@@ -41,6 +47,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        totalMoney = 0;
+        day = 1;
         SetStageTimer(day);
         UpdateUI();
     }
@@ -56,6 +64,13 @@ public class GameManager : MonoBehaviour
                 day++;
                 SetStageTimer(day);
                 UpdateUI();
+                if(!result.gameObject.activeSelf)
+                {
+                    isPlaying = false;
+                    totalMoney += money;
+                    inGame.gameObject.SetActive(false);
+                    result.gameObject.SetActive(true);
+                }
             }
         }
     }
@@ -161,6 +176,15 @@ public class GameManager : MonoBehaviour
             Debug.LogError("스테이지 데이터 불러오기x.");
             second = 180;
         }
+    }
+
+    public void SetRepute(int value)
+    {
+        if(repute <= 0)
+        {
+            repute = 0;
+        }
+        repute += value;
     }
 
     private void UpdateUI()
