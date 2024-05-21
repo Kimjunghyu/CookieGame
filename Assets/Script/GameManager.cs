@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    
     private void Start()
     {
         totalMoney = 0;
@@ -121,6 +121,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickStart()
     {
+        money = 0;
         if (title.activeSelf)
         {
             gameOver = false;
