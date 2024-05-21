@@ -1,0 +1,111 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+
+public class ShopDataLoad : MonoBehaviour
+{
+    public static ShopDataLoad instance;
+    public string csvFilePath = "Assets/Resources/Table/ShopIngTable.csv";
+
+    private List<ShopData> items = new List<ShopData>();
+    private List<ShopData> bGradeItems = new List<ShopData>();
+    private List<ShopData> aGradeItems = new List<ShopData>();
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            LoadItemData();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void LoadItemData()
+    {
+        if (File.Exists(csvFilePath))
+        {
+            string[] lines = File.ReadAllLines(csvFilePath);
+
+            bool isFirstLine = true;
+            foreach (string line in lines)
+            {
+                if (isFirstLine)
+                {
+                    isFirstLine = false;
+                    continue;
+                }
+                if (string.IsNullOrEmpty(line)) continue;
+                string[] row = line.Split('\t');
+                ShopData newItem = new ShopData(
+                    int.Parse(row[0]),
+                    row[1],
+                    int.Parse(row[2]),
+                    row[3],
+                    row[4],
+                    row[5],
+                    int.Parse(row[6]),
+                    row[7],
+                    row[8],
+                    row[9]
+                );
+                items.Add(newItem);
+                if (newItem.ProductLevel == 0)
+                {
+                    bGradeItems.Add(newItem);
+                }
+                else
+                {
+                    aGradeItems.Add(newItem);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("CSV 파일 불러오기 실패 :" + csvFilePath);
+        }
+    }
+
+    public List<ShopData> GetBGradeItems()
+    {
+        return bGradeItems;
+    }
+
+    public List<ShopData> GetAGradeItems()
+    {
+        return aGradeItems;
+    }
+}
+
+[System.Serializable]
+public class ShopData
+{
+    public int ProductID;
+    public string ProductName;
+    public int ProductType;
+    public string ProductPrice;
+    public string ProductImage;
+    public string DescText;
+    public int ProductLevel;
+    public string IngButtonImage;
+    public string SpriteId;
+    public string ItemInfo;
+    public ShopData(int productID, string productName, int productType, string productPrice, string productImage, string descText, int productLevel, string ingButtonImage, string spriteId, string itemInfo)
+    {
+        ProductID = productID;
+        ProductName = productName;
+        ProductType = productType;
+        ProductPrice = productPrice;
+        ProductImage = productImage;
+        DescText = descText;
+        ProductLevel = productLevel;
+        IngButtonImage = ingButtonImage;
+        SpriteId = spriteId;
+        ItemInfo = itemInfo;
+    }
+}

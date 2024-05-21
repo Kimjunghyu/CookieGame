@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject title;
     public GameObject inGame;
     public GameObject result;
+    public GameObject shop;
 
     public Image startImage;
     public Sprite ready;

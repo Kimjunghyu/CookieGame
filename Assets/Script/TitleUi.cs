@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class TitleUi : MonoBehaviour
 {
+    public GameObject shop;
+
     public TextMeshProUGUI titleDay;
     public TextMeshProUGUI titleGold;
 
     private void Start()
     {
-        titleDay.text = $"Day : {GameManager.instance.day.ToString()}";
+        titleDay.text = $"Day : 1";
         titleGold.text = GameManager.instance.totalMoney.ToString();
     }
 
@@ -18,9 +20,18 @@ public class TitleUi : MonoBehaviour
     {
         if(GameManager.instance != null)
         {
-            titleDay.text = $"Day : {GameManager.instance.day.ToString()}";
+            titleDay.text = $"Day : {GameManager.instance.day}";
             titleGold.text = GameManager.instance.totalMoney.ToString();
         }
         
+    }
+
+    public void OnClickShop()
+    {
+        if (!shop.gameObject.activeSelf)
+        {
+            shop.gameObject.SetActive(true);
+            gameObject.SetActive(false);
+        }
     }
 }
