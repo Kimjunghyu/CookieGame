@@ -9,6 +9,15 @@ public class StoreManager : MonoBehaviour
     public GameObject[] itemSlots;
     public Button[] buyButtons;
 
+    public GameObject purchasePopup;
+    public TextMeshProUGUI popupItemName;
+    public TextMeshProUGUI popupItemPrice;
+    public Button confirmButton;
+    public Button cancelButton;
+
+    private ShopData currentItem; // 현재 선택된 아이템
+    private Button currentButton; // 현재 선택된 버튼
+
     private List<ShopData> bGradeItems;
     private List<ShopData> aGradeItems;
 
@@ -33,8 +42,9 @@ public class StoreManager : MonoBehaviour
         {
             shopGold.text = GameManager.instance.totalMoney.ToString();
         }
-    }
 
+        purchasePopup.SetActive(false);
+    }
 
     private void SetBGradeItems()
     {
@@ -74,36 +84,75 @@ public class StoreManager : MonoBehaviour
 
     private void DisplayItem(GameObject slot, ShopData item)
     {
-        slot.transform.Find("itemname").GetComponent<TextMeshProUGUI>().text = item.ProductName;
-        slot.transform.GetComponentInChildren<Image>().sprite = LoadSprite(item.SpriteId);
-        slot.transform.Find("iteminfo").GetComponent<TextMeshProUGUI>().text = item.ItemInfo;
-        var button = slot.transform.GetComponentInChildren<Button>();
-        button.transform.GetComponentInChildren<TextMeshProUGUI>().text = int.Parse(item.ProductPrice).ToString();
+        Transform itemNameTransform = slot.transform.Find("itemInfo/itemName/itemname");
+        TextMeshProUGUI itemNameText = itemNameTransform.GetComponent<TextMeshProUGUI>();
+        itemNameText.text = item.ProductName;
+
+        Transform itemImageTransform = slot.transform.Find("itemInfo/Image/itemImage");
+        Image itemImage = itemImageTransform.GetComponent<Image>();
+        itemImage.sprite = LoadSprite(item.SpriteId);
+
+        Transform itemInfoTransform = slot.transform.Find("itemInfo/itemInfo/iteminfo");
+        TextMeshProUGUI itemInfoText = itemInfoTransform.GetComponent<TextMeshProUGUI>();
+        itemInfoText.text = item.ItemInfo;
+
+        Transform buttonTransform = slot.transform.Find("buyButton");
+        Button button = buttonTransform.GetComponent<Button>();
+        TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>(true);
+        buttonText.text = item.ProductPrice.ToString();
     }
 
     private void AddBuyButtonListener(Button button, ShopData item)
     {
-        button.onClick.AddListener(() => BuyItem(item));
+        button.onClick.AddListener(() => ShowPopup(button, item));
     }
 
-    private void BuyItem(ShopData item)
+    private void ShowPopup(Button button, ShopData item)
     {
-        if (bGradeItems.Contains(item))
+        currentItem = item;
+        currentButton = button;
+        popupItemName.text = item.ProductName;
+        popupItemPrice.text = item.ProductPrice.ToString();
+        purchasePopup.SetActive(true);
+    }
+
+    public void OnClickBuy()
+    {
+        //구매 했을시 행동 추가
+        var value = currentItem.ProductPrice;
+        if (GameManager.instance.totalMoney >= value)
         {
-            bGradeItems.Remove(item);
+            GameManager.instance.totalMoney -= value;
+            shopGold.text = GameManager.instance.totalMoney.ToString();
+
+            if (bGradeItems.Contains(currentItem))
+            {
+                bGradeItems.Remove(currentItem);
+            }
+            else if (aGradeItems.Contains(currentItem))
+            {
+                aGradeItems.Remove(currentItem);
+            }
+
+            currentButton.transform.parent.gameObject.SetActive(false);
+            currentButton.gameObject.SetActive(false);
+
+            if (bGradeItems.Count <= 0)
+            {
+                SetAGradeItems();
+            }
         }
-        else if (aGradeItems.Contains(item))
+        else
         {
-            aGradeItems.Remove(item);
+            Debug.Log("Not enough money");
         }
 
-        // 구매 처리 로직 추가
-        // ...
+        purchasePopup.SetActive(false);
+    }
 
-        if (bGradeItems.Count <= 0)
-        {
-            SetAGradeItems();
-        }
+    public void ExitPopUp()
+    {
+        purchasePopup.SetActive(false);
     }
 
     private Sprite LoadSprite(string spriteId)
@@ -113,11 +162,10 @@ public class StoreManager : MonoBehaviour
 
     public void OnClickExit()
     {
-        if(!title.gameObject.activeSelf)
+        if (!title.gameObject.activeSelf)
         {
             gameObject.SetActive(false);
             title.gameObject.SetActive(true);
-
         }
     }
 
@@ -127,11 +175,6 @@ public class StoreManager : MonoBehaviour
     }
 
     public void OnClickDough()
-    {
-
-    }
-
-    public void OnClickBuy()
     {
 
     }

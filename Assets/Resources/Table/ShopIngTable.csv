@@ -1,7 +1,7 @@
 ﻿ProductID,ProductName,ProductType,ProductPrice,ProductImage,ProductLevel,IngButtonImage,SpirteId,itemInfo
-0,초코반죽,0,"1,000",Product1.png,0,Ing2Button.png,dough2.png,B등급 반죽
-1,딸기잼토핑,0,"1,500",Product2.png,0,Ing13Button.png,Toppingstore3.png,B등급 토핑
-2,코코넛토핑,0,"1,500",Product3.png,0,Ing14Button.png,Toppingstore4.png,B등급 토핑
-3,말차반죽,0,"5,000",Product4.png,1,Ing3Button.png,dough3.png,A등급 반죽
-4,오레오토핑,0,"6,000",Product5.png,1,Ing15Button.png,Toppingstore5.png,A등급 토핑
-5,마시멜로우토핑,0,"6,000",Product6.png,1,Ing16Button.png,Toppingstore6.png,A등급 토핑
+0,초코반죽,0,1000 ,Product1,0,Ing2Button,dough2,B등급 반죽
+1,딸기잼토핑,0,1500 ,Product2,0,Ing13Button,Toppingstore3,B등급 토핑
+2,코코넛토핑,0,1500 ,Product3,0,Ing14Button,Toppingstore4,B등급 토핑
+3,말차반죽,0,5000 ,Product4,1,Ing3Button,dough3,A등급 반죽
+4,오레오토핑,0,6000 ,Product5,1,Ing15Button,Toppingstore5,A등급 토핑
+5,마시멜로우토핑,0,6000 ,Product6,1,Ing16Button,Toppingstore6,A등급 토핑

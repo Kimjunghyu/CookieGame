@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     
     private void Start()
     {
-        totalMoney = 0;
+        totalMoney = 99999;
         day = 1;
         SetStageTimer(day);
         UpdateUI();
