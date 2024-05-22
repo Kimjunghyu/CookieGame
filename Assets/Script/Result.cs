@@ -21,9 +21,15 @@ public class Result : MonoBehaviour
         day.text = "Day : " + currentDay.ToString();
         totalCoin.text = "Total : " + GameManager.instance.totalMoney.ToString();
         todayCoin.text = "Coin : " + GameManager.instance.money.ToString();
-        repute.text = $"Reputation : {beforeRepute} -> {GameManager.instance.repute}";
+        tax.text = "tax : " + GameManager.instance.tax.ToString();
+        resultCoin.text = "result :" + GameManager.instance.currCoin.ToString();
+        repute.text = $"Reputation : {beforeRepute} ¢º {GameManager.instance.repute}";
     }
 
+    private void OnDisable()
+    {
+        GameManager.instance.totalMoney = GameManager.instance.currCoin;
+    }
     public void OnClickNext()
     {
         gameObject.SetActive(false);

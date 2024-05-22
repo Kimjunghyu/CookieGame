@@ -39,7 +39,7 @@ public class ReputeDataLoad : MonoBehaviour
                     continue;
                 }
                 if (string.IsNullOrEmpty(line)) continue;
-                string[] row = line.Split('\t'); // Assuming the CSV is tab-separated
+                string[] row = line.Split(','); // Assuming the CSV is tab-separated
                 if (row.Length >= 6)
                 {
                     int id = int.Parse(row[0]);
@@ -51,6 +51,12 @@ public class ReputeDataLoad : MonoBehaviour
                     reputeDataList.Add(new ReputeData(id, start, end, visitStart, visitEnd, tax));
                 }
             }
+
+            Debug.Log("Loaded Repute Data: " + reputeDataList.Count + " entries.");
+        }
+        else
+        {
+            Debug.LogError("CSV file not found at path: " + csvFilePath);
         }
     }
 

@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI dayText;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI moneyText;
-
+    public AudioSource mainBGM;
+    public AudioSource gameBGM;
     public int day { get; set; }
     public int totalMoney { get; set; }
     public int repute {  get; set; }
@@ -29,9 +30,12 @@ public class GameManager : MonoBehaviour
     private float second = 0f;
     public int money { get; set; }
     public int stage { get; private set; }
+    public int tax { get; set; }
+    public float bgmValue { get; set; }
     public bool gameOver = false;
     public bool isPlaying { get; set; }
-
+    public bool bgmPlaying = true;
+    public int currCoin = 0;
     private void Awake()
     {
         Time.timeScale = 0f;
@@ -48,28 +52,49 @@ public class GameManager : MonoBehaviour
     
     private void Start()
     {
+        tax = 0;
+        bgmValue = 1f;
+        if (title.activeSelf)
+        {
+            PlayMainBGM();
+        }
         ResetPlayerPrefs();
         totalMoney = 99999;
         day = 1;
         stage = 0;
         SetStageTimer(day);
         UpdateUI();
+        UpdateTax();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if(bgmPlaying)
         {
-            Time.timeScale = 1;
+            if (mainBGM != null)
+            {
+                mainBGM.volume = bgmValue;
+            }
+            if (gameBGM != null)
+            {
+                gameBGM.volume = bgmValue;
+            }
+
+            if (title.activeSelf && !mainBGM.isPlaying)
+            {
+                PlayMainBGM();
+            }
+            else if (inGame.activeSelf && !gameBGM.isPlaying)
+            {
+                PlayGameBGM();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        else
         {
-            Time.timeScale = 2;
+            mainBGM.Stop();
+            gameBGM.Stop();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            Time.timeScale = 10;
-        }
+
         if (isPlaying)
         {
             timerText.text = $"{(int)second / 60:D2}:{(int)second % 60:D2}";
@@ -83,6 +108,7 @@ public class GameManager : MonoBehaviour
                 {
                     isPlaying = false;
                     totalMoney += money;
+                    currCoin = totalMoney - tax;
                     inGame.gameObject.SetActive(false);
                     result.gameObject.SetActive(true);
                 }
@@ -90,6 +116,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void PlayMainBGM()
+    {
+        if (gameBGM.isPlaying)
+        {
+            gameBGM.Stop();
+        }
+        mainBGM.Play();
+    }
+
+    private void PlayGameBGM()
+    {
+        if (mainBGM.isPlaying)
+        {
+            mainBGM.Stop();
+        }
+        gameBGM.Play();
+    }
     public void OnClickStop()
     {
         if (!pause.activeSelf && isPlaying)
@@ -137,6 +180,8 @@ public class GameManager : MonoBehaviour
     public void OnClickStart()
     {
         money = 0;
+        SetStageTimer(day);
+        UpdateUI();
         if (title.activeSelf)
         {
             gameOver = false;
@@ -195,13 +240,27 @@ public class GameManager : MonoBehaviour
 
     public void SetRepute(int value)
     {
-        if(repute <= 0)
+        if(repute < 0)
         {
             repute = 0;
         }
         repute += value;
+        UpdateTax();
     }
-
+    private void UpdateTax()
+    {
+        ReputeData reputeData = ReputeDataLoad.instance.GetReputeData(repute);
+        if (reputeData != null)
+        {
+            tax = reputeData.Tax;
+            Debug.Log("Tax updated to: " + tax);
+        }
+        else
+        {
+            tax = 0;
+            Debug.Log("No matching ReputeData found. Tax set to: " + tax);
+        }
+    }
     private void UpdateUI()
     {
         timerText.text = $"{(int)second / 60:D2}:{(int)second % 60:D2}";
