@@ -31,7 +31,7 @@ public class ShopDataLoad : MonoBehaviour
         if (File.Exists(csvFilePath))
         {
             string[] lines = File.ReadAllLines(csvFilePath);
-            int expectedColumnCount = 9;  // 기대되는 열의 수
+            int expectedColumnCount = 9;
 
             bool isFirstLine = true;
             foreach (string line in lines)

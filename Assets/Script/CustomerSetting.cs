@@ -23,23 +23,31 @@ public class CustomerSetting : MonoBehaviour
 
     private int addCoin;
     private int repute;
+
+    private Coroutine printCoinCoroutine;
+
     private void Start()
     {
-        if(!gameObject.activeSelf)
+        if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
         }
     }
+
     private void OnEnable()
     {
+        ApplyReputeData();
         customer = GetComponentsInChildren<Image>();
 
-        speed = Random.Range(4, 8);
         customerImage.sprite = customerImages[Random.Range(0, customerImages.Length)];
         slider = GetComponentInChildren<Slider>();
-        slider.gameObject.SetActive(true);
-        slider.value = slider.maxValue;
-        slider.fillRect.GetComponentInChildren<Image>().sprite = maxValueImage;
+        if (slider != null)
+        {
+            slider.gameObject.SetActive(true);
+            slider.value = slider.maxValue;
+            slider.fillRect.GetComponentInChildren<Image>().sprite = maxValueImage;
+        }
+
         int currentStage = GameManager.instance.stage;
         StageData stageData = StageDataLoad.instance.GetStageData(currentStage - 1);
         if (stageData != null)
@@ -53,34 +61,54 @@ public class CustomerSetting : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void ApplyReputeData()
     {
-        slider.value -= speed * Time.deltaTime;
+        int currentRepute = GameManager.instance.repute;
+        ReputeData reputeData = ReputeDataLoad.instance.GetReputeData(currentRepute);
 
-        if(slider.value <= 19 )
+        if (reputeData != null)
         {
-            SetSliderSprite();
-        }
-
-        if(slider.value <= 0)
-        {
-            gameObject.SetActive(false);
+            speed = Random.Range(reputeData.CusVisitTimerStart, reputeData.CusVisitTimerEnd);
         }
     }
-    
+
+    private void Update()
+    {
+        if (slider != null)
+        {
+            slider.value -= speed * Time.deltaTime;
+
+            if (slider.value <= 19)
+            {
+                SetSliderSprite();
+            }
+
+            if (slider.value <= 0)
+            {
+                gameObject.SetActive(false);
+            }
+        }
+    }
+
     private void SetSliderSprite()
     {
-        var image = slider.fillRect.GetComponentInChildren<Image>();
-        image.sprite = lowTimerSprite;
-        image.type = Image.Type.Filled;
+        if (slider != null)
+        {
+            var image = slider.fillRect.GetComponentInChildren<Image>();
+            if (image != null)
+            {
+                image.sprite = lowTimerSprite;
+                image.type = Image.Type.Filled;
+            }
+        }
     }
 
     public void OnClickCustomer()
     {
         selectCookie = cookieImage;
-        if(selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
+        if (selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
         {
-            if(selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
+            if (selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
             {
                 foreach (var go in customer)
                 {
@@ -90,10 +118,14 @@ public class CustomerSetting : MonoBehaviour
                 repute = 1;
                 GameManager.instance.SetRepute(repute);
                 GameManager.instance.AddMoney(addCoin);
-                StartCoroutine(PrintCoin(addCoin, repute));
+                if (printCoinCoroutine != null)
+                {
+                    StopCoroutine(printCoinCoroutine);
+                }
+                printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
                 CookieManager.Instance.OnClickTrash();
             }
-            else if(CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
+            else if (CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
             {
                 foreach (var go in customer)
                 {
@@ -103,7 +135,11 @@ public class CustomerSetting : MonoBehaviour
                 repute = -1;
                 GameManager.instance.SetRepute(repute);
                 GameManager.instance.AddMoney(addCoin);
-                StartCoroutine(PrintCoin(addCoin, repute));
+                if (printCoinCoroutine != null)
+                {
+                    StopCoroutine(printCoinCoroutine);
+                }
+                printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
                 CookieManager.Instance.OnClickTrash();
             }
             else
@@ -116,7 +152,11 @@ public class CustomerSetting : MonoBehaviour
                 repute = -1;
                 GameManager.instance.SetRepute(repute);
                 GameManager.instance.AddMoney(addCoin);
-                StartCoroutine(PrintCoin(addCoin,repute));
+                if (printCoinCoroutine != null)
+                {
+                    StopCoroutine(printCoinCoroutine);
+                }
+                printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
                 CookieManager.Instance.OnClickTrash();
             }
         }
@@ -125,22 +165,34 @@ public class CustomerSetting : MonoBehaviour
 
     private IEnumerator PrintCoin(int coinvalue, int reputevalue)
     {
-        coin.gameObject.SetActive(true);
-        if(reputevalue > 0)
+        if (coin != null)
         {
-            coin.text = $"+{coinvalue}\n+{reputevalue}";
+            coin.gameObject.SetActive(true);
+            if (reputevalue > 0)
+            {
+                coin.text = $"+{coinvalue}\n+{reputevalue}";
+            }
+            else
+            {
+                coin.text = $"+{coinvalue}\n{reputevalue}";
+            }
+            yield return new WaitForSeconds(1);
+            coin.gameObject.SetActive(false);
         }
-        else
-        {
-            coin.text = $"+{coinvalue}\n{reputevalue}";
-        }
-        yield return new WaitForSeconds(1);
-        coin.gameObject.SetActive(false);
+
         foreach (var go in customer)
         {
-            go.gameObject.SetActive(true);
+            if (go != null)
+            {
+                go.gameObject.SetActive(true);
+            }
         }
-        slider.gameObject.SetActive(true);
+
+        if (slider != null)
+        {
+            slider.gameObject.SetActive(true);
+        }
+
         gameObject.SetActive(false);
     }
 }

@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     
     private void Start()
     {
+        ResetPlayerPrefs();
         totalMoney = 99999;
         day = 1;
         stage = 0;
@@ -227,5 +228,11 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         startImage.gameObject.SetActive(false);
         isPlaying = true;
+    }
+
+    private void ResetPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll(); // PlayerPrefs √ ±‚»≠
+        PlayerPrefs.Save();
     }
 }
