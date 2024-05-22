@@ -43,10 +43,6 @@ public class StageDataLoad : MonoBehaviour
                 stageDataRows.Add(row);
             }
         }
-        else
-        {
-            Debug.LogError("CSV 파일 불러오기 실패 :" + csvFilePath);
-        }
     }
 
     public StageData GetStageData(int stage)
@@ -60,11 +56,9 @@ public class StageDataLoad : MonoBehaviour
                 int cookieStart = int.Parse(row[1]);
                 int cookieEnd = int.Parse(row[2]);
                 int stageTimer = int.Parse(row[3]);
-                Debug.Log($"스테이지 데이터 가져오기 성공: {stageNumber}");
                 return new StageData(stageNumber, cookieStart, cookieEnd, stageTimer);
             }
         }
-        Debug.LogError("유효한 데이터가 없습니다: " + stage);
         return null;
     }
 }

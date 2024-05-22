@@ -40,13 +40,16 @@ public class CustomerSetting : MonoBehaviour
         slider.gameObject.SetActive(true);
         slider.value = slider.maxValue;
         slider.fillRect.GetComponentInChildren<Image>().sprite = maxValueImage;
-        if (cookies.Length > 0)
+        int currentStage = GameManager.instance.stage;
+        StageData stageData = StageDataLoad.instance.GetStageData(currentStage - 1);
+        if (stageData != null)
         {
-            cookieImage.sprite = cookies[Random.Range(0, cookies.Length)];
-        }
-        else
-        {
-            Debug.LogError("Cookies array is empty.");
+            int cookieStart = stageData.cookieStart;
+            int cookieEnd = stageData.cookieEnd;
+            if (cookies.Length > 0 && cookieStart >= 0 && cookieEnd < cookies.Length)
+            {
+                cookieImage.sprite = cookies[Random.Range(cookieStart, cookieEnd + 1)];
+            }
         }
     }
 

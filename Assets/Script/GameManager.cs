@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     private float second = 0f;
     public int money { get; set; }
-    private int stage = 0;
+    public int stage { get; private set; }
     public bool gameOver = false;
     public bool isPlaying { get; set; }
 
@@ -50,12 +50,25 @@ public class GameManager : MonoBehaviour
     {
         totalMoney = 99999;
         day = 1;
+        stage = 0;
         SetStageTimer(day);
         UpdateUI();
     }
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Time.timeScale = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Time.timeScale = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Time.timeScale = 10;
+        }
         if (isPlaying)
         {
             timerText.text = $"{(int)second / 60:D2}:{(int)second % 60:D2}";
@@ -175,7 +188,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("스테이지 데이터 불러오기x.");
             second = 180;
         }
     }

@@ -27,6 +27,8 @@ public class CookieManager : MonoBehaviour
     private Image buttonImage;
 
     private Image tempImage;
+
+    private int value = 0;
     private bool isPlaying = false;
     private void Awake()
     {
@@ -60,6 +62,11 @@ public class CookieManager : MonoBehaviour
             item.gameObject.SetActive(false);
         foreach (var item in timers)
             item.gameObject.SetActive(false);
+    }
+
+    private Sprite LoadSprite(string spriteName)
+    {
+        return Resources.Load<Sprite>(spriteName);
     }
 
     private void Update()
@@ -125,13 +132,14 @@ public class CookieManager : MonoBehaviour
     }
     public void OnClickToppingCa()
     {
+        value = 1;
         if(isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
                 if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
                 {
-                    images[i].sprite = prefabCookieA;
+                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
                     break;
                 }
@@ -142,13 +150,14 @@ public class CookieManager : MonoBehaviour
 
     public void OnClickToppingCb()
     {
+        value = 2;
         if(isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
                 if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
                 {
-                    images[i].sprite = prefabCookieB;
+                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
                     break;
                 }
@@ -156,7 +165,74 @@ public class CookieManager : MonoBehaviour
         }
         return;
     }
-
+    public void OnClickToppingBa()
+    {
+        value = 3;
+        if (isPlaying)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                {
+                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
+                    images[i].tag = cookieTag;
+                    break;
+                }
+            }
+        }
+        return;
+    }
+    public void OnClickToppingBb()
+    {
+        value = 4;
+        if (isPlaying)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                {
+                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
+                    images[i].tag = cookieTag;
+                    break;
+                }
+            }
+        }
+        return;
+    }
+    public void OnClickToppingAa()
+    {
+        value = 5;
+        if (isPlaying)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                {
+                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
+                    images[i].tag = cookieTag;
+                    break;
+                }
+            }
+        }
+        return;
+    }
+    public void OnClickToppingAb()
+    {
+        value = 6;
+        if (isPlaying)
+        {
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                {
+                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
+                    images[i].tag = cookieTag;
+                    break;
+                }
+            }
+        }
+        return;
+    }
     public void OnClickTrash()
     {
         if (tableimage != null && isPlaying)

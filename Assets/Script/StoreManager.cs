@@ -30,11 +30,14 @@ public class StoreManager : MonoBehaviour
         {
             bGradeItems = ShopDataLoad.instance.GetBGradeItems();
             aGradeItems = ShopDataLoad.instance.GetAGradeItems();
-            SetBGradeItems();
-        }
-        else
-        {
-            Debug.LogError("데이터 테이블 인스턴스x.");
+            if (bGradeItems.Count > 0)
+            {
+                SetBGradeItems();
+            }
+            else
+            {
+                SetAGradeItems();
+            }
         }
 
         shopGold.text = "0";
@@ -52,7 +55,13 @@ public class StoreManager : MonoBehaviour
         {
             if (i < bGradeItems.Count)
             {
+                itemSlots[i].SetActive(true);
                 DisplayItem(itemSlots[i], bGradeItems[i]);
+                if (!buyButtons[i].gameObject.activeSelf)
+                {
+                    buyButtons[i].gameObject.SetActive(true);
+                }
+                buyButtons[i].interactable = true;
                 AddBuyButtonListener(buyButtons[i], bGradeItems[i]);
             }
             else
@@ -70,8 +79,12 @@ public class StoreManager : MonoBehaviour
             if (i < aGradeItems.Count)
             {
                 itemSlots[i].SetActive(true);
-                buyButtons[i].gameObject.SetActive(true);
                 DisplayItem(itemSlots[i], aGradeItems[i]);
+                if (!buyButtons[i].gameObject.activeSelf)
+                {
+                    buyButtons[i].gameObject.SetActive(true);
+                }
+                buyButtons[i].interactable = true;
                 AddBuyButtonListener(buyButtons[i], aGradeItems[i]);
             }
             else
@@ -118,7 +131,6 @@ public class StoreManager : MonoBehaviour
 
     public void OnClickBuy()
     {
-        //구매 했을시 행동 추가
         var value = currentItem.ProductPrice;
         if (GameManager.instance.totalMoney >= value)
         {
@@ -128,23 +140,17 @@ public class StoreManager : MonoBehaviour
             if (bGradeItems.Contains(currentItem))
             {
                 bGradeItems.Remove(currentItem);
+                if (bGradeItems.Count <= 0)
+                {
+                    SetAGradeItems();
+                }
             }
             else if (aGradeItems.Contains(currentItem))
             {
                 aGradeItems.Remove(currentItem);
             }
 
-            currentButton.transform.parent.gameObject.SetActive(false);
-            currentButton.gameObject.SetActive(false);
-
-            if (bGradeItems.Count <= 0)
-            {
-                SetAGradeItems();
-            }
-        }
-        else
-        {
-            Debug.Log("Not enough money");
+            currentButton.interactable = false;
         }
 
         purchasePopup.SetActive(false);
@@ -171,10 +177,17 @@ public class StoreManager : MonoBehaviour
 
     public void OnClickTopping()
     {
-
+        if (bGradeItems.Count > 0)
+        {
+            SetBGradeItems();
+        }
+        else
+        {
+            SetAGradeItems();
+        }
     }
 
-    public void OnClickDough()
+    public void OnClickItem()
     {
 
     }

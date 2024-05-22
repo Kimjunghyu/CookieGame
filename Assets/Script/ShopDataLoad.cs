@@ -45,18 +45,10 @@ public class ShopDataLoad : MonoBehaviour
                 if (string.IsNullOrEmpty(line)) continue;
 
                 string[] row = line.Split(',');
-
-                // 디버깅 로그 추가
-                Debug.Log("Row data: " + string.Join(", ", row));
-
-                // 행의 길이 확인
                 if (row.Length != expectedColumnCount)
                 {
-                    Debug.LogWarning("Unexpected column count: " + row.Length + " in row: " + line);
                     continue;
                 }
-
-                // 예외 처리 추가
                 try
                 {
                     int productPrice = int.Parse(row[3].Replace(",", "").Replace("\"", "").Trim());
