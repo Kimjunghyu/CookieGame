@@ -37,9 +37,21 @@ public class CustomerSetting : MonoBehaviour
     {
         ApplyReputeData();
         customer = GetComponentsInChildren<Image>();
-
-        customerImage.sprite = customerImages[Random.Range(0, customerImages.Length)];
         slider = GetComponentInChildren<Slider>();
+        if (!customerImage.gameObject.activeSelf && customerImage!=null)
+        {
+            customerImage.gameObject.SetActive(true);
+        }
+        if (coin.gameObject.activeSelf && coin != null)
+        {
+            coin.gameObject.SetActive(false);
+        }
+        if(!slider.gameObject.activeSelf && slider != null)
+        {
+            slider.gameObject.SetActive(true);
+        }
+        customerImage.sprite = customerImages[Random.Range(0, customerImages.Length)];
+        
         if (slider != null)
         {
             slider.gameObject.SetActive(true);

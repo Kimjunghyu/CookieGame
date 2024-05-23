@@ -19,7 +19,7 @@ public class Result : MonoBehaviour
     {
         int currentDay = GameManager.instance.day - 1;
         day.text = currentDay.ToString() + $"{TransrationKr.instance.GetTranslation("Day")}";
-        totalCoin.text = $"{TransrationKr.instance.GetTranslation("Result1")}" + " : " + GameManager.instance.totalMoney.ToString();
+        totalCoin.text = $"{TransrationKr.instance.GetTranslation("Result1")}" + " : " + GameManager.instance.resultTotalMoney.ToString();
         todayCoin.text = $"{TransrationKr.instance.GetTranslation("Result2")}"+" : " + GameManager.instance.money.ToString();
         tax.text = $"{TransrationKr.instance.GetTranslation("Result3")}" + " : " + GameManager.instance.tax.ToString();
         resultCoin.text = $"{TransrationKr.instance.GetTranslation("Result4")}" + " :" + GameManager.instance.currCoin.ToString();
@@ -29,6 +29,7 @@ public class Result : MonoBehaviour
     private void OnDisable()
     {
         GameManager.instance.totalMoney = GameManager.instance.currCoin;
+        GameManager.instance.resultTotalMoney = GameManager.instance.currCoin;
         beforeRepute = GameManager.instance.repute;
     }
     public void OnClickNext()

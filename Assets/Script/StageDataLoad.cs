@@ -25,12 +25,10 @@ public class StageDataLoad : MonoBehaviour
 
     private void LoadStageData()
     {
-        Debug.Log("Attempting to load file from path: " + csvFilePath);
         TextAsset csvFile = Resources.Load<TextAsset>(csvFilePath);
 
         if (csvFile != null)
         {
-            Debug.Log("File loaded successfully");
             string[] lines = csvFile.text.Split('\n');
 
             bool isFirstLine = true;

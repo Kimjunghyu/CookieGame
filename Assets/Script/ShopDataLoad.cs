@@ -5,7 +5,7 @@ using UnityEngine;
 public class ShopDataLoad : MonoBehaviour
 {
     public static ShopDataLoad instance;
-    public string csvFilePath = "ShopIngTable"; // 확장자 제외
+    public string csvFilePath = "ShopIngTable";
 
     private List<ShopData> items = new List<ShopData>();
     private List<ShopData> bGradeItems = new List<ShopData>();

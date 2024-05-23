@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     public int repute {  get; set; }
 
     private float second = 0f;
+    public int resultTotalMoney { get; set; }
     public int money { get; set; }
     public int stage { get; private set; }
     public int tax { get; set; }
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
         }
         ResetPlayerPrefs();
         totalMoney = 99999;
+        resultTotalMoney = totalMoney;
         day = 1;
         stage = 0;
         SetStageTimer(day);
