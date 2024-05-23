@@ -18,8 +18,8 @@ public class StoreManager : MonoBehaviour
     public Button confirmButton;
     public Button cancelButton;
 
-    private ShopData currentItem; // 현재 선택된 아이템
-    private Button currentButton; // 현재 선택된 버튼
+    private ShopData currentItem;
+    private Button currentButton;
 
     private List<ShopData> bGradeItems;
     private List<ShopData> aGradeItems;
@@ -27,12 +27,13 @@ public class StoreManager : MonoBehaviour
     public GameObject title;
     public TextMeshProUGUI shopGold;
 
-    private List<string> purchasedItems; // 구매된 아이템 리스트
+    private List<string> purchasedItems;
     private int CookiebuyCount = 0;
 
     private void OnEnable()
     {
-        purchasedItems = LoadPurchasedItems(); // 구매된 아이템 로드
+        purchasedItems = LoadPurchasedItems(); 
+
 
         if (ShopDataLoad.instance != null)
         {
@@ -56,8 +57,6 @@ public class StoreManager : MonoBehaviour
         int aGradeCount = aGradeItems.Count;
 
         bool showAGradeItems = CookiebuyCount >= 3;
-
-        Debug.Log($"CookiebuyCount: {CookiebuyCount}, Show A Grade Items: {showAGradeItems}");
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
@@ -155,9 +154,9 @@ public class StoreManager : MonoBehaviour
             GameManager.instance.totalMoney -= value;
             shopGold.text = GameManager.instance.totalMoney.ToString();
 
-            purchasedItems.Add(currentItem.ProductName); // 구매된 아이템 추가
+            purchasedItems.Add(currentItem.ProductName);
             CookiebuyCount++;
-            SavePurchasedItems(); // 구매된 아이템 저장
+            SavePurchasedItems();
             currentButton.interactable = false;
             foreach(var item in itemArray)
             {
@@ -169,7 +168,7 @@ public class StoreManager : MonoBehaviour
                     }
                 }
             }
-            SetItems(); // 아이템 리스트 갱신
+            SetItems();
         }
 
         purchasePopup.SetActive(false);
@@ -207,14 +206,14 @@ public class StoreManager : MonoBehaviour
     private void SavePurchasedItems()
     {
         PlayerPrefs.SetString("PurchasedItems", string.Join(",", purchasedItems));
-        PlayerPrefs.SetInt("CookiebuyCount", CookiebuyCount); // CookiebuyCount 저장
+        PlayerPrefs.SetInt("CookiebuyCount", CookiebuyCount);
         PlayerPrefs.Save();
     }
 
     private List<string> LoadPurchasedItems()
     {
         var savedItems = PlayerPrefs.GetString("PurchasedItems", "");
-        CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0); // CookiebuyCount 로드
+        CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0);
         if (!string.IsNullOrEmpty(savedItems))
         {
             return new List<string>(savedItems.Split(','));

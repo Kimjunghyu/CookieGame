@@ -1,0 +1,10 @@
+﻿IngID,IngName,IngType,IngLevel,IngImage
+1,버터반죽,0,0,Ing1.png
+2,초코반죽,0,1,Ing2.png
+3,말차반죽,0,2,Ing3.png
+11,초콜릿칩토핑,1,0,Ing11.png
+12,초코잼토핑,1,0,Ing12.png
+13,딸기잼토핑,1,1,Ing13.png
+14,코코넛토핑,1,1,Ing14.png
+15,오레오토핑,1,2,Ing15.png
+16,마시멜로우토핑,1,2,Ing16.png

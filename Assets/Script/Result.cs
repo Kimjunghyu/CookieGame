@@ -29,11 +29,11 @@ public class Result : MonoBehaviour
     private void OnDisable()
     {
         GameManager.instance.totalMoney = GameManager.instance.currCoin;
+        beforeRepute = GameManager.instance.repute;
     }
     public void OnClickNext()
     {
         gameObject.SetActive(false);
-        //GameManager.instance.isPlaying = true;
         if(!title.gameObject.activeSelf )
         {
             GameManager.instance.money = 0;

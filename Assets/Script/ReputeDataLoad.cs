@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class ReputeDataLoad : MonoBehaviour
 {
     public static ReputeDataLoad instance;
-    public string csvFilePath = "Assets/Resources/Table/ReputeTable.csv";
+    public string csvFilePath = "ReputeTable"; // 확장자를 제외한 Resources 폴더 내부 경로
 
     private List<ReputeData> reputeDataList = new List<ReputeData>();
 
@@ -26,9 +25,13 @@ public class ReputeDataLoad : MonoBehaviour
 
     private void LoadReputeData()
     {
-        if (File.Exists(csvFilePath))
+        TextAsset csvFile = Resources.Load<TextAsset>(csvFilePath);
+        Debug.Log("Attempting to load file from path: " + csvFilePath);
+
+        if (csvFile != null)
         {
-            string[] lines = File.ReadAllLines(csvFilePath);
+            Debug.Log("File loaded successfully");
+            string[] lines = csvFile.text.Split('\n');
 
             bool isFirstLine = true;
             foreach (string line in lines)
@@ -39,7 +42,7 @@ public class ReputeDataLoad : MonoBehaviour
                     continue;
                 }
                 if (string.IsNullOrEmpty(line)) continue;
-                string[] row = line.Split(','); // Assuming the CSV is tab-separated
+                string[] row = line.Split(',');
                 if (row.Length >= 6)
                 {
                     int id = int.Parse(row[0]);
@@ -51,12 +54,10 @@ public class ReputeDataLoad : MonoBehaviour
                     reputeDataList.Add(new ReputeData(id, start, end, visitStart, visitEnd, tax));
                 }
             }
-
-            Debug.Log("Loaded Repute Data: " + reputeDataList.Count + " entries.");
         }
         else
         {
-            Debug.LogError("CSV file not found at path: " + csvFilePath);
+            Debug.LogError("Failed to load data from ReputeTable at path: " + csvFilePath);
         }
     }
 

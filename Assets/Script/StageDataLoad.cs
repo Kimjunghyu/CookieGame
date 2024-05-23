@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class StageDataLoad : MonoBehaviour
 {
     public static StageDataLoad instance;
-    public string csvFilePath = "Assets/Resources/Table/StageTable.csv";
+    public string csvFilePath = "StageTable"; // 확장자를 제외한 Resources 폴더 내부 경로
 
     private List<string[]> stageDataRows = new List<string[]>();
 
@@ -26,9 +25,13 @@ public class StageDataLoad : MonoBehaviour
 
     private void LoadStageData()
     {
-        if (File.Exists(csvFilePath))
+        Debug.Log("Attempting to load file from path: " + csvFilePath);
+        TextAsset csvFile = Resources.Load<TextAsset>(csvFilePath);
+
+        if (csvFile != null)
         {
-            string[] lines = File.ReadAllLines(csvFilePath);
+            Debug.Log("File loaded successfully");
+            string[] lines = csvFile.text.Split('\n');
 
             bool isFirstLine = true;
             foreach (string line in lines)
@@ -42,6 +45,10 @@ public class StageDataLoad : MonoBehaviour
                 string[] row = line.Split(',');
                 stageDataRows.Add(row);
             }
+        }
+        else
+        {
+            Debug.LogError("Failed to load data from StageTable at path: " + csvFilePath);
         }
     }
 

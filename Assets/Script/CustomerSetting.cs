@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
 
 public class CustomerSetting : MonoBehaviour
@@ -110,57 +109,38 @@ public class CustomerSetting : MonoBehaviour
         {
             if (selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
             {
-                foreach (var go in customer)
-                {
-                    go.gameObject.SetActive(false);
-                }
-                addCoin = 100;
-                repute = 1;
-                GameManager.instance.SetRepute(repute);
-                GameManager.instance.AddMoney(addCoin);
-                if (printCoinCoroutine != null)
-                {
-                    StopCoroutine(printCoinCoroutine);
-                }
-                printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
-                CookieManager.Instance.OnClickTrash();
+                HandleCustomerInteraction(100, 1);
             }
             else if (CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
             {
-                foreach (var go in customer)
-                {
-                    go.gameObject.SetActive(false);
-                }
-                addCoin = 10;
-                repute = -1;
-                GameManager.instance.SetRepute(repute);
-                GameManager.instance.AddMoney(addCoin);
-                if (printCoinCoroutine != null)
-                {
-                    StopCoroutine(printCoinCoroutine);
-                }
-                printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
-                CookieManager.Instance.OnClickTrash();
+                HandleCustomerInteraction(10, -1);
             }
             else
             {
-                foreach (var go in customer)
-                {
-                    go.gameObject.SetActive(false);
-                }
-                addCoin = 50;
-                repute = -1;
-                GameManager.instance.SetRepute(repute);
-                GameManager.instance.AddMoney(addCoin);
-                if (printCoinCoroutine != null)
-                {
-                    StopCoroutine(printCoinCoroutine);
-                }
-                printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
-                CookieManager.Instance.OnClickTrash();
+                HandleCustomerInteraction(50, -1);
             }
         }
-        return;
+    }
+
+    private void HandleCustomerInteraction(int coinAmount, int reputeChange)
+    {
+        foreach (var go in customer)
+        {
+            go.gameObject.SetActive(false);
+        }
+
+        addCoin = coinAmount;
+        repute = reputeChange;
+        GameManager.instance.SetRepute(repute);
+        GameManager.instance.AddMoney(addCoin);
+
+        if (printCoinCoroutine != null)
+        {
+            StopCoroutine(printCoinCoroutine);
+        }
+
+        printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
+        CookieManager.Instance.OnClickTrash();
     }
 
     private IEnumerator PrintCoin(int coinvalue, int reputevalue)
@@ -168,14 +148,7 @@ public class CustomerSetting : MonoBehaviour
         if (coin != null)
         {
             coin.gameObject.SetActive(true);
-            if (reputevalue > 0)
-            {
-                coin.text = $"+{coinvalue}\n+{reputevalue}";
-            }
-            else
-            {
-                coin.text = $"+{coinvalue}\n{reputevalue}";
-            }
+            coin.text = reputevalue > 0 ? $"+{coinvalue}\n+{reputevalue}" : $"+{coinvalue}\n{reputevalue}";
             yield return new WaitForSeconds(1);
             coin.gameObject.SetActive(false);
         }

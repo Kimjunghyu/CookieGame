@@ -157,7 +157,6 @@ public class GameManager : MonoBehaviour
 
     public void OnClickQuit()
     {
-#if UNITY_EDITOR
         if (!title.activeSelf)
         {
             title.SetActive(true);
@@ -166,11 +165,17 @@ public class GameManager : MonoBehaviour
 
             gameOver = true;
         }
+
+    }
+
+    public void OnClickGameExit()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
     }
-
     public void AddMoney(int amount)
     {
         money += amount;
@@ -240,11 +245,11 @@ public class GameManager : MonoBehaviour
 
     public void SetRepute(int value)
     {
-        if(repute < 0)
+        repute += value;
+        if (repute < 0)
         {
             repute = 0;
         }
-        repute += value;
         UpdateTax();
     }
     private void UpdateTax()
@@ -253,12 +258,10 @@ public class GameManager : MonoBehaviour
         if (reputeData != null)
         {
             tax = reputeData.Tax;
-            Debug.Log("Tax updated to: " + tax);
         }
         else
         {
             tax = 0;
-            Debug.Log("No matching ReputeData found. Tax set to: " + tax);
         }
     }
     private void UpdateUI()
@@ -291,7 +294,7 @@ public class GameManager : MonoBehaviour
 
     private void ResetPlayerPrefs()
     {
-        PlayerPrefs.DeleteAll(); // PlayerPrefs ÃÊ±âÈ­
+        PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
     }
 }

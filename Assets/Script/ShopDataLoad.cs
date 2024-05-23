@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 public class ShopDataLoad : MonoBehaviour
 {
     public static ShopDataLoad instance;
-    public string csvFilePath = "Assets/Resources/Table/ShopIngTable.csv";
+    public string csvFilePath = "ShopIngTable"; // 확장자 제외
 
     private List<ShopData> items = new List<ShopData>();
     private List<ShopData> bGradeItems = new List<ShopData>();
@@ -28,9 +27,13 @@ public class ShopDataLoad : MonoBehaviour
 
     private void LoadItemData()
     {
-        if (File.Exists(csvFilePath))
+        TextAsset csvFile = Resources.Load<TextAsset>(csvFilePath);
+        Debug.Log("Attempting to load file from path: " + csvFilePath);
+
+        if (csvFile != null)
         {
-            string[] lines = File.ReadAllLines(csvFilePath);
+            Debug.Log("File loaded successfully");
+            string[] lines = csvFile.text.Split('\n');
             int expectedColumnCount = 9;
 
             bool isFirstLine = true;
@@ -83,7 +86,7 @@ public class ShopDataLoad : MonoBehaviour
         }
         else
         {
-            Debug.LogError("CSV 파일 불러오기 실패 :" + csvFilePath);
+            Debug.LogError("Failed to load data from ShopIngTable at path: " + csvFilePath);
         }
     }
 

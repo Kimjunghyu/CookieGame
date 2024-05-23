@@ -372,7 +372,6 @@ public class CookieManager : MonoBehaviour
         timers[index].gameObject.SetActive(false);
         ovenImage.gameObject.SetActive(true);
         StartCoroutine(StartBurnt(index, ovenImage));
-        //ovenImage.sprite = temp.sprite;
     }
 
     private IEnumerator StartBurnt(int index, Image ovenImage)
@@ -388,54 +387,6 @@ public class CookieManager : MonoBehaviour
         ovenImage.sprite = burntCookie;
         burntTimer[index].gameObject.SetActive(false);
     }
-    //public void OnClickOven()
-    //{
-    //    if (isPlaying)
-    //    {
-    //        Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-    //        if (button.image != buttonImage)
-    //        {
-    //            buttonImage.color = Color.white;
-    //        }
-    //        if (button != null)
-    //        {
-    //            Image foundImage = null;
-    //            Image resultCookie = null;
-    //            foreach (Transform child in button.transform)
-    //            {
-    //                Image image = child.GetComponent<Image>();
-    //                if (image != null)
-    //                {
-    //                    if (image.tag == cookieTag)
-    //                    {
-    //                        resultCookie = image;
-    //                    }
-    //                    else
-    //                    {
-    //                        foundImage = image;
-    //                    }
-    //                }
-    //            }
-
-    //            if (resultCookie != null && resultCookie.gameObject.activeSelf)
-    //            {
-    //                SelectedCookieImage = resultCookie;
-    //                tableimage = resultCookie;
-    //                resultCookieSelect = true;
-    //            }
-    //            else if (tableimage != null && !resultCookieSelect)
-    //            {
-    //                if (tableimage.sprite != null && tableimage.tag == cookieTag)
-    //                {
-    //                    tableimage.sprite = null;
-    //                    tableimage.tag = "Untagged";
-    //                    tableimage.gameObject.SetActive(false);
-    //                }
-    //            }
-    //        }
-    //    }
-      
-    //}
 
     public void EmptyTableImage()
     {
