@@ -15,18 +15,18 @@ public class TitleUi : MonoBehaviour
     public Toggle volumeToggle;
     private void Start()
     {
-        titleDay.text = $"Day : 1";
+        titleDay.text = "1" + $"{TransrationKr.instance.GetTranslation("Day")}";
         titleGold.text = GameManager.instance.totalMoney.ToString();
-        titleRepute.text = "Repute : 0";
+        titleRepute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + " : 0";
     }
 
     private void OnEnable()
     {
         if(GameManager.instance != null)
         {
-            titleDay.text = $"Day : {GameManager.instance.day}";
+            titleDay.text = $"{GameManager.instance.day}" + $"{TransrationKr.instance.GetTranslation("Day")}"; ;
             titleGold.text = GameManager.instance.totalMoney.ToString();
-            titleRepute.text = "Repute : " +GameManager.instance.repute.ToString();
+            titleRepute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + " : " + GameManager.instance.repute.ToString();
         }
     }
 

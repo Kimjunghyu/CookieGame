@@ -124,6 +124,7 @@ public class CustomerSetting : MonoBehaviour
 
     private void HandleCustomerInteraction(int coinAmount, int reputeChange)
     {
+        CookieManager.Instance.SelectedCookieImage = null;
         foreach (var go in customer)
         {
             go.gameObject.SetActive(false);
@@ -138,7 +139,6 @@ public class CustomerSetting : MonoBehaviour
         {
             StopCoroutine(printCoinCoroutine);
         }
-
         printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
         CookieManager.Instance.OnClickTrash();
     }
@@ -148,7 +148,7 @@ public class CustomerSetting : MonoBehaviour
         if (coin != null)
         {
             coin.gameObject.SetActive(true);
-            coin.text = reputevalue > 0 ? $"+{coinvalue}\n+{reputevalue}" : $"+{coinvalue}\n{reputevalue}";
+            coin.text = reputevalue > 0 ? $"+{coinvalue}$\n{TransrationKr.instance.GetTranslation("Repute")}+{reputevalue}" : $"+{coinvalue}$\n{TransrationKr.instance.GetTranslation("Repute")}{reputevalue}";
             yield return new WaitForSeconds(1);
             coin.gameObject.SetActive(false);
         }

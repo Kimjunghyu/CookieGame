@@ -18,12 +18,12 @@ public class Result : MonoBehaviour
     private void OnEnable()
     {
         int currentDay = GameManager.instance.day - 1;
-        day.text = "Day : " + currentDay.ToString();
-        totalCoin.text = "Total : " + GameManager.instance.totalMoney.ToString();
-        todayCoin.text = "Coin : " + GameManager.instance.money.ToString();
-        tax.text = "tax : " + GameManager.instance.tax.ToString();
-        resultCoin.text = "result :" + GameManager.instance.currCoin.ToString();
-        repute.text = $"Reputation : {beforeRepute} ¢º {GameManager.instance.repute}";
+        day.text = currentDay.ToString() + $"{TransrationKr.instance.GetTranslation("Day")}";
+        totalCoin.text = $"{TransrationKr.instance.GetTranslation("Result1")}" + " : " + GameManager.instance.totalMoney.ToString();
+        todayCoin.text = $"{TransrationKr.instance.GetTranslation("Result2")}"+" : " + GameManager.instance.money.ToString();
+        tax.text = $"{TransrationKr.instance.GetTranslation("Result3")}" + " : " + GameManager.instance.tax.ToString();
+        resultCoin.text = $"{TransrationKr.instance.GetTranslation("Result4")}" + " :" + GameManager.instance.currCoin.ToString();
+        repute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + $" : {beforeRepute} ¢º {GameManager.instance.repute}";
     }
 
     private void OnDisable()

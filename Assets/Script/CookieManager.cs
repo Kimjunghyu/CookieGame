@@ -8,7 +8,7 @@ public class CookieManager : MonoBehaviour
     public static readonly string cookieTag = "Cookie";
     public static CookieManager Instance { get; private set; }
     public Image SelectedCookieImage { get; set; }
-    public bool resultCookieSelect { get; private set; }
+    public bool resultCookieSelect { get; set; }
 
     public Slider[] timers;
     public Slider[] burntTimer;
@@ -252,20 +252,11 @@ public class CookieManager : MonoBehaviour
         if (isPlaying)
         {
             resultCookieSelect = false;
-            if (tableButtonImage != null)
-            {
-                tableButtonImage.color = Color.white;
-            }
-
             if (EventSystem.current.currentSelectedGameObject != null)
             {
                 Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
                 if (button != null)
                 {
-                    buttonImage = button.GetComponent<Image>();
-                    buttonImage.color = Color.red;
-
-                    tableButtonImage = buttonImage;
                     Image foundImage = null;
                     foreach (Transform child in button.transform)
                     {
@@ -308,11 +299,6 @@ public class CookieManager : MonoBehaviour
                 Button button = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
                 if (button != null)
                 {
-                    if (button.image != buttonImage)
-                    {
-                        buttonImage.color = Color.white;
-                    }
-
                     Image foundImage = null;
                     Image resultCookie = null;
                     foreach (Transform child in button.transform)
@@ -354,12 +340,13 @@ public class CookieManager : MonoBehaviour
     private IEnumerator StartTimer(int index, Image ovenImage, Image resultImage)
     {
         ovenImage.gameObject.SetActive(true);
+        burntTimer[index].gameObject.SetActive(true);
+        burntTimer[index].value = 100;
         ovenImage.sprite = resultImage.sprite;
-        ovenImage.gameObject.SetActive(false);
-        var temp = resultImage;
         tableimage.sprite = null;
         tableimage.tag = "Untagged";
         tableimage.gameObject.SetActive(false);
+        burntTimer[index].gameObject.SetActive(false);
         timers[index].gameObject.SetActive(true);
         timers[index].value = 100;
 
