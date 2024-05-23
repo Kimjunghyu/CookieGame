@@ -10,12 +10,14 @@ public class TitleUi : MonoBehaviour
     public GameObject option;
     public TextMeshProUGUI titleDay;
     public TextMeshProUGUI titleGold;
+    public TextMeshProUGUI titleRepute;
     public Slider volumeValue;
     public Toggle volumeToggle;
     private void Start()
     {
         titleDay.text = $"Day : 1";
         titleGold.text = GameManager.instance.totalMoney.ToString();
+        titleRepute.text = "Repute : 0";
     }
 
     private void OnEnable()
@@ -24,8 +26,8 @@ public class TitleUi : MonoBehaviour
         {
             titleDay.text = $"Day : {GameManager.instance.day}";
             titleGold.text = GameManager.instance.totalMoney.ToString();
+            titleRepute.text = "Repute : " +GameManager.instance.repute.ToString();
         }
-
     }
 
     private void Update()
