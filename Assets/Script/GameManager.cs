@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public GameObject inGame;
     public GameObject result;
     public GameObject shop;
+    public GameObject cookieInfo;
 
     public Image startImage;
     public Sprite ready;
@@ -28,6 +29,11 @@ public class GameManager : MonoBehaviour
     public int repute {  get; set; }
 
     private float second = 0f;
+
+    public int customerSpeed { get; set; } = 0;
+
+    public int ovenSpeed { get; set; } = 0;
+    public int addGold { get; set; } = 0;
     public int resultTotalMoney { get; set; }
     public int money { get; set; }
     public int stage { get; private set; }
@@ -194,6 +200,10 @@ public class GameManager : MonoBehaviour
             gameOver = false;
             title.SetActive(false);
             stopButton.interactable = true;
+        }
+        if(cookieInfo.gameObject.activeSelf)
+        {
+            cookieInfo.gameObject.SetActive(false);
         }
         StartCoroutine(StartMessage());
         if (!inGame.activeSelf)

@@ -30,6 +30,10 @@ public class CookieManager : MonoBehaviour
 
     private int value = 0;
     private bool isPlaying = false;
+
+    public Button[] ovens;
+    private Outline currentActiveOutline;
+
     private void Awake()
     {
         if (Instance == null)
@@ -41,20 +45,21 @@ public class CookieManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     private void OnDisable()
     {
-        foreach(var item in images)
+        foreach (var item in images)
         {
             item.sprite = null;
             item.tag = "Untagged";
             item.gameObject.SetActive(false);
         }
-        foreach(var item in ovenImage)
+        foreach (var item in ovenImage)
         {
             item.sprite = null;
             item.gameObject.SetActive(false);
         }
-        if(tableButtonImage != null)
+        if (tableButtonImage != null)
         {
             tableButtonImage.color = Color.white;
         }
@@ -72,11 +77,16 @@ public class CookieManager : MonoBehaviour
     private void Update()
     {
         isPlaying = GameManager.instance.isPlaying;
+
+        if(SelectedCookieImage == null && currentActiveOutline != null)
+        {
+            currentActiveOutline.enabled = false;
+        }
     }
 
     public void OnClickDoughC()
     {
-        if(isPlaying)
+        if (isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
@@ -130,10 +140,11 @@ public class CookieManager : MonoBehaviour
 
         return;
     }
+
     public void OnClickToppingCa()
     {
         value = 1;
-        if(isPlaying)
+        if (isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
@@ -151,7 +162,7 @@ public class CookieManager : MonoBehaviour
     public void OnClickToppingCb()
     {
         value = 2;
-        if(isPlaying)
+        if (isPlaying)
         {
             for (int i = 0; i < images.Length; i++)
             {
@@ -165,6 +176,7 @@ public class CookieManager : MonoBehaviour
         }
         return;
     }
+
     public void OnClickToppingBa()
     {
         value = 3;
@@ -182,6 +194,7 @@ public class CookieManager : MonoBehaviour
         }
         return;
     }
+
     public void OnClickToppingBb()
     {
         value = 4;
@@ -199,6 +212,7 @@ public class CookieManager : MonoBehaviour
         }
         return;
     }
+
     public void OnClickToppingAa()
     {
         value = 5;
@@ -216,6 +230,7 @@ public class CookieManager : MonoBehaviour
         }
         return;
     }
+
     public void OnClickToppingAb()
     {
         value = 6;
@@ -233,6 +248,7 @@ public class CookieManager : MonoBehaviour
         }
         return;
     }
+
     public void OnClickTrash()
     {
         if (tableimage != null && isPlaying)
@@ -301,6 +317,8 @@ public class CookieManager : MonoBehaviour
                 {
                     Image foundImage = null;
                     Image resultCookie = null;
+                    Outline ovenOutline = null;
+
                     foreach (Transform child in button.transform)
                     {
                         Image image = child.GetComponent<Image>();
@@ -314,6 +332,11 @@ public class CookieManager : MonoBehaviour
                             {
                                 foundImage = image;
                             }
+                        }
+
+                        if (button.GetComponent<Outline>() != null)
+                        {
+                            ovenOutline = button.GetComponent<Outline>();
                         }
                     }
 
@@ -331,6 +354,16 @@ public class CookieManager : MonoBehaviour
                             tableimage.tag = "Untagged";
                             tableimage.gameObject.SetActive(false);
                         }
+                    }
+                    if (currentActiveOutline != null)
+                    {
+                        currentActiveOutline.enabled = false;
+                    }
+                    if (ovenOutline != null && resultCookie.gameObject.activeSelf)
+                    {
+                        ovenOutline.enabled = true;
+
+                        currentActiveOutline = ovenOutline;
                     }
                 }
             }
@@ -352,7 +385,7 @@ public class CookieManager : MonoBehaviour
 
         while (timers[index].value > 0)
         {
-            timers[index].value -= 30 * Time.deltaTime;
+            timers[index].value -= (30 + GameManager.instance.ovenSpeed) * Time.deltaTime;
             yield return null;
         }
 

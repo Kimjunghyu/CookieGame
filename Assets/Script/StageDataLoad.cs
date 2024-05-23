@@ -5,7 +5,7 @@ using UnityEngine;
 public class StageDataLoad : MonoBehaviour
 {
     public static StageDataLoad instance;
-    public string csvFilePath = "StageTable"; // 확장자를 제외한 Resources 폴더 내부 경로
+    public string csvFilePath = "StageTable";
 
     private List<string[]> stageDataRows = new List<string[]>();
 

@@ -1,4 +1,4 @@
 ﻿ProductID,ProductName,ProductType,ProductPrice,ProductImage,ProductEffect,EffectValue,ProductInfo
-6,디퓨저,1,5000 ,Product6,0,2,손님 타이머 증가
-7,황금 돼지,1,8000 ,Product7,1,10,획득 골드량 증가
-8,프리미엄 오븐,1,8000 ,Product8,2,1,오븐 작동 시간 감소
+6,디퓨저,1,5000,Product6,0,2,손님 타이머 증가
+7,황금 돼지,1,8000,Product7,1,10,획득 골드량 증가
+8,프리미엄 오븐,1,8000,Product8,2,10,오븐 작동 시간 감소

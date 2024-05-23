@@ -5,7 +5,7 @@ using UnityEngine;
 public class ReputeDataLoad : MonoBehaviour
 {
     public static ReputeDataLoad instance;
-    public string csvFilePath = "ReputeTable"; // 확장자를 제외한 Resources 폴더 내부 경로
+    public string csvFilePath = "ReputeTable";
 
     private List<ReputeData> reputeDataList = new List<ReputeData>();
 
@@ -26,11 +26,9 @@ public class ReputeDataLoad : MonoBehaviour
     private void LoadReputeData()
     {
         TextAsset csvFile = Resources.Load<TextAsset>(csvFilePath);
-        Debug.Log("Attempting to load file from path: " + csvFilePath);
 
         if (csvFile != null)
         {
-            Debug.Log("File loaded successfully");
             string[] lines = csvFile.text.Split('\n');
 
             bool isFirstLine = true;

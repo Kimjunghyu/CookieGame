@@ -30,10 +30,11 @@ public class StoreManager : MonoBehaviour
     private List<string> purchasedItems;
     private int CookiebuyCount = 0;
 
+    public GameObject topping;
+    public GameObject item;
     private void OnEnable()
     {
-        purchasedItems = LoadPurchasedItems(); 
-
+        purchasedItems = LoadPurchasedItems();
 
         if (ShopDataLoad.instance != null)
         {
@@ -155,7 +156,10 @@ public class StoreManager : MonoBehaviour
             shopGold.text = GameManager.instance.totalMoney.ToString();
 
             purchasedItems.Add(currentItem.ProductName);
-            CookiebuyCount++;
+            if(topping.gameObject.activeSelf)
+            {
+                CookiebuyCount++;
+            }
             SavePurchasedItems();
             currentButton.interactable = false;
             foreach(var item in itemArray)
@@ -182,25 +186,6 @@ public class StoreManager : MonoBehaviour
     private Sprite LoadSprite(string spriteId)
     {
         return Resources.Load<Sprite>(spriteId);
-    }
-
-    public void OnClickExit()
-    {
-        if (!title.gameObject.activeSelf)
-        {
-            gameObject.SetActive(false);
-            title.gameObject.SetActive(true);
-        }
-    }
-
-    public void OnClickTopping()
-    {
-        SetItems();
-    }
-
-    public void OnClickItem()
-    {
-        // 필요시 구현
     }
 
     private void SavePurchasedItems()

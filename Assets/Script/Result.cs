@@ -13,6 +13,7 @@ public class Result : MonoBehaviour
     public TextMeshProUGUI repute;
 
     public GameObject title;
+    public GameObject cookieInfo;
     int beforeRepute = 0;
 
     private void OnEnable()
@@ -39,6 +40,10 @@ public class Result : MonoBehaviour
         {
             GameManager.instance.money = 0;
             title.gameObject.SetActive(true);
+            if(!cookieInfo.gameObject.activeSelf && GameManager.instance.day >1)
+            {
+                cookieInfo.gameObject.SetActive(true);
+            }
         }
     }
 

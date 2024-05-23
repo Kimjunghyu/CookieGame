@@ -32,7 +32,6 @@ public class ShopDataLoad : MonoBehaviour
 
         if (csvFile != null)
         {
-            Debug.Log("File loaded successfully");
             string[] lines = csvFile.text.Split('\n');
             int expectedColumnCount = 9;
 

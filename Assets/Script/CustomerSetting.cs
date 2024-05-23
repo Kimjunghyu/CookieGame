@@ -24,6 +24,7 @@ public class CustomerSetting : MonoBehaviour
     private int repute;
 
     private Coroutine printCoinCoroutine;
+    private bool timeOver = false;
 
     private void Start()
     {
@@ -38,7 +39,7 @@ public class CustomerSetting : MonoBehaviour
         ApplyReputeData();
         customer = GetComponentsInChildren<Image>();
         slider = GetComponentInChildren<Slider>();
-        if (!customerImage.gameObject.activeSelf && customerImage!=null)
+        if (!customerImage.gameObject.activeSelf && customerImage != null)
         {
             customerImage.gameObject.SetActive(true);
         }
@@ -46,12 +47,12 @@ public class CustomerSetting : MonoBehaviour
         {
             coin.gameObject.SetActive(false);
         }
-        if(!slider.gameObject.activeSelf && slider != null)
+        if (!slider.gameObject.activeSelf && slider != null)
         {
             slider.gameObject.SetActive(true);
         }
         customerImage.sprite = customerImages[Random.Range(0, customerImages.Length)];
-        
+
         if (slider != null)
         {
             slider.gameObject.SetActive(true);
@@ -70,6 +71,7 @@ public class CustomerSetting : MonoBehaviour
                 cookieImage.sprite = cookies[Random.Range(cookieStart, cookieEnd + 1)];
             }
         }
+        timeOver = false;
     }
 
     private void ApplyReputeData()
@@ -79,13 +81,13 @@ public class CustomerSetting : MonoBehaviour
 
         if (reputeData != null)
         {
-            speed = Random.Range(reputeData.CusVisitTimerStart, reputeData.CusVisitTimerEnd);
+            speed = Random.Range(5 + GameManager.instance.customerSpeed, 7 + GameManager.instance.customerSpeed);
         }
     }
 
     private void Update()
     {
-        if (slider != null)
+        if (slider != null && !timeOver)
         {
             slider.value -= speed * Time.deltaTime;
 
@@ -96,7 +98,8 @@ public class CustomerSetting : MonoBehaviour
 
             if (slider.value <= 0)
             {
-                gameObject.SetActive(false);
+                timeOver = true;
+                HandleCustomerInteraction(0, -1);
             }
         }
     }
@@ -121,15 +124,15 @@ public class CustomerSetting : MonoBehaviour
         {
             if (selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
             {
-                HandleCustomerInteraction(100, 1);
+                HandleCustomerInteraction(100 + GameManager.instance.addGold, 1);
             }
             else if (CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
             {
-                HandleCustomerInteraction(10, -1);
+                HandleCustomerInteraction(10 + GameManager.instance.addGold, -1);
             }
             else
             {
-                HandleCustomerInteraction(50, -1);
+                HandleCustomerInteraction(50 + GameManager.instance.addGold, -1);
             }
         }
     }
