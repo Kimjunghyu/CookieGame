@@ -77,6 +77,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(inGame.gameObject.activeSelf)
+        {
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                OnClickStop();
+            }
+        }
         if(bgmPlaying)
         {
             if (mainBGM != null)

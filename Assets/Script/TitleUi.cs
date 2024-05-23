@@ -32,6 +32,13 @@ public class TitleUi : MonoBehaviour
 
     private void Update()
     {
+        if (gameObject.activeSelf)
+        {
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                OnClickOption();
+            }
+        }
         if (option.gameObject.activeSelf)
         {
             GameManager.instance.bgmValue = volumeValue.value;
