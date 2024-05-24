@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
             PlayMainBGM();
         }
         ResetPlayerPrefs();
-        totalMoney = 99999;
+        totalMoney = 0;
         resultTotalMoney = totalMoney;
         day = 1;
         stage = 0;

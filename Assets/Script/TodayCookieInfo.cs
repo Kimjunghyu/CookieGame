@@ -16,13 +16,21 @@ public class TodayCookieInfo : MonoBehaviour
         {
             int cookieStart = stageData.cookieStart;
             int cookieEnd = stageData.cookieEnd;
-            for(int i = cookieStart; i <= 12; i++)
+            for(int i = cookieStart; i <= cookieEnd; i++)
             {
                 images[i].gameObject.SetActive(true);
                 images[i].sprite = cookies[i];
             }
         }
         else
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    private void Update()
+    {
+        if(Input.touchCount > 0)
         {
             gameObject.SetActive(false);
         }
