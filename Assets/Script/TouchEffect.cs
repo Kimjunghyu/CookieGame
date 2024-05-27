@@ -8,8 +8,11 @@ public class TouchEffect : MonoBehaviour
     public Camera mainCamera;
     public Camera particleCamera;
     public int poolSize = 10;
+    public float minTouchMovement = 10f; // 터치 이동 최소 거리
 
     private List<GameObject> particlePool = new List<GameObject>();
+    private Vector3 lastTouchPosition;
+    private Vector3 lastMousePosition;
 
     void Start()
     {
@@ -33,41 +36,66 @@ public class TouchEffect : MonoBehaviour
 
     void Update()
     {
+        ProcessTouch();
+        ProcessMouse();
+    }
+
+    void ProcessTouch()
+    {
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
+            Vector3 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, mainCamera.nearClipPlane));
+            touchPosition.z = 0;
+
             if (touch.phase == TouchPhase.Began)
             {
-                Vector3 touchPosition = mainCamera.ScreenToWorldPoint(new Vector3(touch.position.x, touch.position.y, mainCamera.nearClipPlane));
-                touchPosition.z = 0;
-                CreateTouchEffect(touchPosition);
+                lastTouchPosition = touchPosition;
+            }
+            else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+            {
+                if (Vector3.Distance(touchPosition, lastTouchPosition) >= minTouchMovement)
+                {
+                    CreateTouchEffect(touchPosition);
+                    lastTouchPosition = touchPosition;
+                }
             }
         }
+    }
 
+    void ProcessMouse()
+    {
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane));
-            mousePosition.z = 0;
-            CreateTouchEffect(mousePosition);
+            lastMousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, mainCamera.nearClipPlane));
+            lastMousePosition.z = 0;
+            CreateTouchEffect(lastMousePosition);
         }
     }
 
     void CreateTouchEffect(Vector3 position)
     {
         GameObject particleEffect = GetParticleFromPool();
-        particleEffect.transform.position = position;
-        particleEffect.SetActive(true);
-
-        ParticleSystem ps = particleEffect.GetComponent<ParticleSystem>();
-        if (ps != null)
+        if (particleEffect != null)
         {
-            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            ps.Play();
-            StartCoroutine(ReturnToPool(particleEffect, ps.main.duration + ps.main.startLifetime.constantMax - 2.5f));
+            particleEffect.transform.position = position;
+            particleEffect.SetActive(true);
+
+            ParticleSystem ps = particleEffect.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                ps.Play();
+                StartCoroutine(ReturnToPool(particleEffect, ps.main.duration + ps.main.startLifetime.constantMax - 2f));
+            }
+            else
+            {
+                StartCoroutine(ReturnToPool(particleEffect, 1f));
+            }
         }
         else
         {
-            StartCoroutine(ReturnToPool(particleEffect, 1f));
+            Debug.LogWarning("No available particles in the pool.");
         }
     }
 
@@ -81,10 +109,7 @@ public class TouchEffect : MonoBehaviour
             }
         }
 
-        GameObject newParticle = Instantiate(particlePrefab);
-        newParticle.SetActive(false);
-        particlePool.Add(newParticle);
-        return newParticle;
+        return null;
     }
 
     IEnumerator ReturnToPool(GameObject obj, float delay)
