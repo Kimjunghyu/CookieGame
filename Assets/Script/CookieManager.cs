@@ -255,6 +255,7 @@ public class CookieManager : MonoBehaviour
         {
             tableimage.sprite = null;
             tableimage.gameObject.SetActive(false);
+            SelectedCookieImage = null;
             if (!resultCookieSelect)
             {
                 tableimage.tag = "Untagged";

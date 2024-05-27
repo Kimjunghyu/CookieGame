@@ -34,5 +34,9 @@ public class TodayCookieInfo : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
+        if(Input.GetMouseButton(0))
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

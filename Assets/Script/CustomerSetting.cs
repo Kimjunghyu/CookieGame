@@ -10,6 +10,7 @@ public class CustomerSetting : MonoBehaviour
     public Sprite[] cookies;
     public Image customerImage;
     public Sprite lowTimerSprite;
+    public Slider customerTimer;
 
     private Image[] customer;
     public TextMeshProUGUI coin;
@@ -17,7 +18,6 @@ public class CustomerSetting : MonoBehaviour
     public float speed;
     public Sprite maxValueImage;
     public Image cookieImage;
-    private Slider slider;
     private Image selectCookie;
 
     private int addCoin;
@@ -36,9 +36,11 @@ public class CustomerSetting : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log("OnEnable called for " + gameObject.name);
+
         ApplyReputeData();
         customer = GetComponentsInChildren<Image>();
-        slider = GetComponentInChildren<Slider>();
+
         if (!customerImage.gameObject.activeSelf && customerImage != null)
         {
             customerImage.gameObject.SetActive(true);
@@ -47,17 +49,14 @@ public class CustomerSetting : MonoBehaviour
         {
             coin.gameObject.SetActive(false);
         }
-        if (!slider.gameObject.activeSelf && slider != null)
-        {
-            slider.gameObject.SetActive(true);
-        }
+
         customerImage.sprite = customerImages[Random.Range(0, customerImages.Length)];
 
-        if (slider != null)
+        if (customerTimer != null)
         {
-            slider.gameObject.SetActive(true);
-            slider.value = slider.maxValue;
-            slider.fillRect.GetComponentInChildren<Image>().sprite = maxValueImage;
+            customerTimer.gameObject.SetActive(true);
+            customerTimer.value = customerTimer.maxValue;
+            customerTimer.fillRect.GetComponentInChildren<Image>().sprite = maxValueImage;
         }
 
         int currentStage = GameManager.instance.stage;
@@ -74,6 +73,24 @@ public class CustomerSetting : MonoBehaviour
         timeOver = false;
     }
 
+    private void OnDisable()
+    {
+        Debug.Log("OnDisable called for " + gameObject.name);
+
+        if (customerTimer != null)
+        {
+            customerTimer.gameObject.SetActive(false);
+        }
+        if (coin != null)
+        {
+            coin.gameObject.SetActive(false);
+        }
+        if (printCoinCoroutine != null)
+        {
+            StopCoroutine(printCoinCoroutine);
+        }
+    }
+
     private void ApplyReputeData()
     {
         int currentRepute = GameManager.instance.repute;
@@ -87,16 +104,16 @@ public class CustomerSetting : MonoBehaviour
 
     private void Update()
     {
-        if (slider != null && !timeOver)
+        if (customerTimer != null && !timeOver)
         {
-            slider.value -= speed * Time.deltaTime;
+            customerTimer .value -= speed * Time.deltaTime;
 
-            if (slider.value <= 19)
+            if (customerTimer.value <= 19)
             {
                 SetSliderSprite();
             }
 
-            if (slider.value <= 0)
+            if (customerTimer.value <= 0)
             {
                 timeOver = true;
                 HandleCustomerInteraction(0, -1);
@@ -106,9 +123,9 @@ public class CustomerSetting : MonoBehaviour
 
     private void SetSliderSprite()
     {
-        if (slider != null)
+        if (customerTimer != null)
         {
-            var image = slider.fillRect.GetComponentInChildren<Image>();
+            var image = customerTimer.fillRect.GetComponentInChildren<Image>();
             if (image != null)
             {
                 image.sprite = lowTimerSprite;
@@ -130,10 +147,18 @@ public class CustomerSetting : MonoBehaviour
             {
                 HandleCustomerInteraction(10 + GameManager.instance.addGold, -1);
             }
-            else
+            else if (selectCookie.sprite.name != CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
             {
                 HandleCustomerInteraction(50 + GameManager.instance.addGold, -1);
             }
+            else
+            {
+                return;
+            }
+        }
+        else if(CookieManager.Instance.SelectedCookieImage == null)
+        {
+            return;
         }
     }
 
@@ -176,9 +201,9 @@ public class CustomerSetting : MonoBehaviour
             }
         }
 
-        if (slider != null)
+        if (customerTimer != null)
         {
-            slider.gameObject.SetActive(true);
+            customerTimer.gameObject.SetActive(true);
         }
 
         gameObject.SetActive(false);
