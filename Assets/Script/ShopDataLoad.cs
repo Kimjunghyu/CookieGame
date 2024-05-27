@@ -28,7 +28,6 @@ public class ShopDataLoad : MonoBehaviour
     private void LoadItemData()
     {
         TextAsset csvFile = Resources.Load<TextAsset>(csvFilePath);
-        Debug.Log("Attempting to load file from path: " + csvFilePath);
 
         if (csvFile != null)
         {

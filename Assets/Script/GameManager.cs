@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     public int currRepute = 0;
     private void Awake()
     {
-        Time.timeScale = 0f;
+        Time.timeScale = 1f;
         if (instance == null)
         {
             instance = this;
