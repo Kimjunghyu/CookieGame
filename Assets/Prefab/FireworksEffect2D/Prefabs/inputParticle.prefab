@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4001914631663283140}
   - component: {fileID: 1278286373369157360}
   - component: {fileID: 8058713227190140558}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Spark_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4974,7 +4974,7 @@ GameObject:
   - component: {fileID: 7932225331466688719}
   - component: {fileID: 1088344930621819185}
   - component: {fileID: 9184326891236805796}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: inputParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9772,12 +9772,12 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1385758161
+  m_SortingLayerID: 1313303059
   m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingOrder: 10
   m_RenderMode: 0
   m_MeshDistribution: 0
-  m_SortMode: 3
+  m_SortMode: 4
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
@@ -9833,7 +9833,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4510053211523712533, guid: 2e41857c4d829764d97552fa13ae695c, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6204846642457819847, guid: 2e41857c4d829764d97552fa13ae695c, type: 3}
       propertyPath: m_LocalPosition.x
