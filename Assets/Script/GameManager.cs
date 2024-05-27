@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     public bool isPlaying { get; set; }
     public bool bgmPlaying = true;
     public int currCoin = 0;
+    public int currRepute = 0;
     private void Awake()
     {
         Time.timeScale = 0f;
@@ -79,9 +80,16 @@ public class GameManager : MonoBehaviour
     {
         if(inGame.gameObject.activeSelf)
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                OnClickStop();
+                if(!pause.gameObject.activeSelf)
+                {
+                    OnClickStop();
+                }
+                else
+                {
+                    OnClickResume();
+                }
             }
         }
         if(bgmPlaying)
@@ -124,6 +132,7 @@ public class GameManager : MonoBehaviour
                     isPlaying = false;
                     totalMoney += money;
                     currCoin = totalMoney - tax;
+                    currRepute = repute;
                     inGame.gameObject.SetActive(false);
                     result.gameObject.SetActive(true);
                 }
@@ -174,6 +183,7 @@ public class GameManager : MonoBehaviour
     {
         if (!title.activeSelf)
         {
+            repute = currRepute;
             title.SetActive(true);
             pause.SetActive(false);
             inGame.SetActive(false);
@@ -199,6 +209,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickStart()
     {
+        repute = currRepute;
         money = 0;
         SetStageTimer(day);
         UpdateUI();

@@ -36,8 +36,6 @@ public class CustomerSetting : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("OnEnable called for " + gameObject.name);
-
         ApplyReputeData();
         customer = GetComponentsInChildren<Image>();
 
@@ -75,8 +73,6 @@ public class CustomerSetting : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("OnDisable called for " + gameObject.name);
-
         if (customerTimer != null)
         {
             customerTimer.gameObject.SetActive(false);
@@ -136,27 +132,34 @@ public class CustomerSetting : MonoBehaviour
 
     public void OnClickCustomer()
     {
-        selectCookie = cookieImage;
-        if (selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
+        if(customerImage.gameObject.activeSelf)
         {
-            if (selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
+            selectCookie = cookieImage;
+            if (selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
             {
-                HandleCustomerInteraction(100 + GameManager.instance.addGold, 1);
+                if (selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
+                {
+                    HandleCustomerInteraction(100 + GameManager.instance.addGold, 1);
+                }
+                else if (CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
+                {
+                    HandleCustomerInteraction(10 + GameManager.instance.addGold, -1);
+                }
+                else if (selectCookie.sprite.name != CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
+                {
+                    HandleCustomerInteraction(50 + GameManager.instance.addGold, -1);
+                }
+                else
+                {
+                    return;
+                }
             }
-            else if (CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
-            {
-                HandleCustomerInteraction(10 + GameManager.instance.addGold, -1);
-            }
-            else if (selectCookie.sprite.name != CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
-            {
-                HandleCustomerInteraction(50 + GameManager.instance.addGold, -1);
-            }
-            else
+            else if (CookieManager.Instance.SelectedCookieImage == null)
             {
                 return;
             }
         }
-        else if(CookieManager.Instance.SelectedCookieImage == null)
+       else
         {
             return;
         }

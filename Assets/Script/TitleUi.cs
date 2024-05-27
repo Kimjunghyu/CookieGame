@@ -13,6 +13,7 @@ public class TitleUi : MonoBehaviour
     public TextMeshProUGUI titleRepute;
     public Slider volumeValue;
     public Toggle volumeToggle;
+
     private void Start()
     {
         titleDay.text = "1" + $"{TransrationKr.instance.GetTranslation("Day")}";
@@ -22,9 +23,9 @@ public class TitleUi : MonoBehaviour
 
     private void OnEnable()
     {
-        if(GameManager.instance != null)
+        if (GameManager.instance != null)
         {
-            titleDay.text = $"{GameManager.instance.day}" + $"{TransrationKr.instance.GetTranslation("Day")}"; ;
+            titleDay.text = $"{GameManager.instance.day}" + $"{TransrationKr.instance.GetTranslation("Day")}";
             titleGold.text = GameManager.instance.totalMoney.ToString();
             titleRepute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + " : " + GameManager.instance.repute.ToString();
         }
@@ -34,47 +35,49 @@ public class TitleUi : MonoBehaviour
     {
         if (gameObject.activeSelf)
         {
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                OnClickOption();
+                if (option.activeSelf)
+                {
+                    option.SetActive(false);
+                }
+                else
+                {
+                    OnClickOption();
+                }
             }
         }
-        if (option.gameObject.activeSelf)
+
+        if (option.activeSelf)
         {
             GameManager.instance.bgmValue = volumeValue.value;
-            if(volumeToggle.isOn)
-            {
-                GameManager.instance.bgmPlaying = true;
-            }
-            else
-            {
-                GameManager.instance.bgmPlaying=false;
-            }
+            GameManager.instance.bgmPlaying = volumeToggle.isOn;
         }
     }
+
     public void OnClickShop()
     {
-        if (!shop.gameObject.activeSelf)
+        if (!shop.activeSelf)
         {
-            shop.gameObject.SetActive(true);
+            shop.SetActive(true);
             gameObject.SetActive(false);
         }
     }
 
     public void OnClickOption()
     {
-        if(!option.gameObject.activeSelf)
+        if (!option.activeSelf)
         {
-            option.gameObject.SetActive(true);
+            option.SetActive(true);
             volumeValue.value = GameManager.instance.bgmValue;
         }
     }
 
     public void OnClickOptionQuit()
     {
-        if(option.gameObject.activeSelf)
+        if (option.activeSelf)
         {
-            option.gameObject.SetActive(false);
+            option.SetActive(false);
         }
     }
 }

@@ -322,6 +322,21 @@ public class CookieManager : MonoBehaviour
 
                     foreach (Transform child in button.transform)
                     {
+                        bool isAnyTimerActive = false;
+                        foreach (Slider slider in button.GetComponentsInChildren<Slider>())
+                        {
+                            if (slider.CompareTag("CookieTimer") && slider.gameObject.activeSelf)
+                            {
+                                isAnyTimerActive = true;
+                                break;
+                            }
+                        }
+
+                        if (isAnyTimerActive)
+                        {
+                            return;
+                        }
+
                         Image image = child.GetComponent<Image>();
                         if (image != null)
                         {
