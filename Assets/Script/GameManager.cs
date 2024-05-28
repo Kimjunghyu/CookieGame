@@ -67,7 +67,8 @@ public class GameManager : MonoBehaviour
             PlayMainBGM();
         }
         ResetPlayerPrefs();
-        totalMoney = 0;
+        StoreItem.ApplyPurchasedItemsEffect();
+        totalMoney = 99999;
         resultTotalMoney = totalMoney;
         day = 1;
         stage = 0;

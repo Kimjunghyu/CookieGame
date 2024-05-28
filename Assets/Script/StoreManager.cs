@@ -32,6 +32,7 @@ public class StoreManager : MonoBehaviour
 
     public GameObject topping;
     public GameObject item;
+
     private void OnEnable()
     {
         purchasedItems = LoadPurchasedItems();
@@ -50,6 +51,7 @@ public class StoreManager : MonoBehaviour
         }
 
         purchasePopup.SetActive(false);
+
     }
 
     private void SetItems()
@@ -156,22 +158,22 @@ public class StoreManager : MonoBehaviour
             shopGold.text = GameManager.instance.totalMoney.ToString();
 
             purchasedItems.Add(currentItem.ProductName);
-            if(topping.gameObject.activeSelf)
+            if (topping.gameObject.activeSelf)
             {
                 CookiebuyCount++;
             }
             SavePurchasedItems();
             currentButton.interactable = false;
-            foreach(var item in itemArray)
+
+            // 구매한 항목 버튼 활성화
+            foreach (var item in itemArray)
             {
-                if(item != null)
+                if (item != null && item.name == currentItem.IngButtonImage)
                 {
-                    if(item.name == currentItem.IngButtonImage)
-                    {
-                        item.interactable = true;
-                    }
+                    item.interactable = true;
                 }
             }
+
             SetItems();
         }
 
@@ -195,10 +197,34 @@ public class StoreManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    private List<string> LoadPurchasedItems()
+
+
+    public static void ActivatePurchasedItems(Button[] itemArray)
+    {
+        var purchasedItems = LoadPurchasedItems();
+
+        // 구매한 항목 버튼 활성화
+        foreach (var item in itemArray)
+        {
+            if (item != null && purchasedItems.Contains(item.name))
+            {
+                item.interactable = true;
+            }
+        }
+    }
+    //private List<string> LoadPurchasedItems()
+    //{
+    //    var savedItems = PlayerPrefs.GetString("PurchasedItems", "");
+    //    CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0);
+    //    if (!string.IsNullOrEmpty(savedItems))
+    //    {
+    //        return new List<string>(savedItems.Split(','));
+    //    }
+    //    return new List<string>();
+    //}
+    private static List<string> LoadPurchasedItems()
     {
         var savedItems = PlayerPrefs.GetString("PurchasedItems", "");
-        CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0);
         if (!string.IsNullOrEmpty(savedItems))
         {
             return new List<string>(savedItems.Split(','));

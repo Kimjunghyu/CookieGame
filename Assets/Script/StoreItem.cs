@@ -141,18 +141,48 @@ public class StoreItem : MonoBehaviour
       
     }
 
-    private void ApplyItemEffect(ShopItemData item)
+    public static void ApplyPurchasedItemsEffect()
+    {
+        var purchasedItem = LoadPurchasedItems();
+        var items = ShopItemDataLoad.instance?.GetItems();
+
+        if (items == null) return;
+
+        foreach (var itemName in purchasedItem)
+        {
+            var item = items.Find(i => i.ProductName == itemName);
+            if (item != null)
+            {
+                ApplyItemEffect(item);
+            }
+        }
+    }
+
+    private static List<string> LoadPurchasedItems()
+    {
+        var savedItems = PlayerPrefs.GetString("PurchasedItem", "");
+        if (!string.IsNullOrEmpty(savedItems))
+        {
+            return new List<string>(savedItems.Split(','));
+        }
+        return new List<string>();
+    }
+
+    private static void ApplyItemEffect(ShopItemData item)
     {
         switch (item.ProductEffect)
         {
             case 0:
                 GameManager.instance.customerSpeed += item.EffectValue;
+                Debug.Log("1");
                 break;
             case 1:
                 GameManager.instance.addGold += item.EffectValue;
+                Debug.Log("2");
                 break;
             case 2:
                 GameManager.instance.ovenSpeed += item.EffectValue;
+                Debug.Log("3");
                 break;
             default:
                 break;
@@ -175,13 +205,13 @@ public class StoreItem : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    private List<string> LoadPurchasedItems()
-    {
-        var savedItems = PlayerPrefs.GetString("PurchasedItem", "");
-        if (!string.IsNullOrEmpty(savedItems))
-        {
-            return new List<string>(savedItems.Split(','));
-        }
-        return new List<string>();
-    }
+    //private List<string> LoadPurchasedItems()
+    //{
+    //    var savedItems = PlayerPrefs.GetString("PurchasedItem", "");
+    //    if (!string.IsNullOrEmpty(savedItems))
+    //    {
+    //        return new List<string>(savedItems.Split(','));
+    //    }
+    //    return new List<string>();
+    //}
 }
