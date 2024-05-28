@@ -204,14 +204,4 @@ public class StoreItem : MonoBehaviour
         PlayerPrefs.SetString("PurchasedItem", string.Join(",", purchasedItem));
         PlayerPrefs.Save();
     }
-
-    //private List<string> LoadPurchasedItems()
-    //{
-    //    var savedItems = PlayerPrefs.GetString("PurchasedItem", "");
-    //    if (!string.IsNullOrEmpty(savedItems))
-    //    {
-    //        return new List<string>(savedItems.Split(','));
-    //    }
-    //    return new List<string>();
-    //}
 }

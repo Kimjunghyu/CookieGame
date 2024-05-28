@@ -7,21 +7,56 @@ public class CustomerManager : MonoBehaviour
     public GameObject[] customers;
     public float minSpawnTime = 5f;
     public float maxSpawnTime = 8f;
+    private Coroutine spawnCoroutine;
 
     private void OnDisable()
     {
         foreach (var customer in customers)
+        {
             customer.gameObject.SetActive(false);
+        }
     }
 
     private void OnEnable()
     {
-        StartCoroutine(SpawnCustomersRandomly());
+        if (GameManager.instance.isPlaying)
+        {
+            StartSpawning();
+        }
+    }
+
+    private void Update()
+    {
+        if (GameManager.instance.isPlaying && spawnCoroutine == null)
+        {
+            StartSpawning();
+        }
+        else if (!GameManager.instance.isPlaying && spawnCoroutine != null)
+        {
+            StopSpawning();
+        }
+    }
+
+    private void StartSpawning()
+    {
+        if (spawnCoroutine == null)
+        {
+            spawnCoroutine = StartCoroutine(SpawnCustomersRandomly());
+        }
+    }
+
+    private void StopSpawning()
+    {
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+        }
     }
 
     private IEnumerator SpawnCustomersRandomly()
     {
-        while (true)
+        while (GameManager.instance.isPlaying)
         {
             yield return new WaitForSeconds(3);
             ActivateRandomCustomer();

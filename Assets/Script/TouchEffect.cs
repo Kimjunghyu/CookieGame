@@ -8,7 +8,7 @@ public class TouchEffect : MonoBehaviour
     public Camera mainCamera;
     public Camera particleCamera;
     public int poolSize = 10;
-    public float minTouchMovement = 10f; // 터치 이동 최소 거리
+    public float minTouchMovement = 10f;
 
     private List<GameObject> particlePool = new List<GameObject>();
     private Vector3 lastTouchPosition;

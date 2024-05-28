@@ -8,34 +8,30 @@ public class StoreManager : MonoBehaviour
 {
     public GameObject[] itemSlots;
     public Button[] buyButtons;
-
     public Button[] itemArray;
-
     public GameObject purchasePopup;
     public TextMeshProUGUI popupItemName;
     public Image popupImage;
     public TextMeshProUGUI popupItemPrice;
     public Button confirmButton;
     public Button cancelButton;
-
     private ShopData currentItem;
     private Button currentButton;
-
     private List<ShopData> bGradeItems;
     private List<ShopData> aGradeItems;
-
     public GameObject title;
     public TextMeshProUGUI shopGold;
-
     private List<string> purchasedItems;
+    private List<string> purchasedItemData;
     private int CookiebuyCount = 0;
-
     public GameObject topping;
     public GameObject item;
 
     private void OnEnable()
     {
         purchasedItems = LoadPurchasedItems();
+        purchasedItemData = LoadPurchasedItemData();
+        CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0);
 
         if (ShopDataLoad.instance != null)
         {
@@ -51,7 +47,7 @@ public class StoreManager : MonoBehaviour
         }
 
         purchasePopup.SetActive(false);
-
+        ActivatePurchasedItems();
     }
 
     private void SetItems()
@@ -60,6 +56,8 @@ public class StoreManager : MonoBehaviour
         int aGradeCount = aGradeItems.Count;
 
         bool showAGradeItems = CookiebuyCount >= 3;
+
+        Debug.Log("CookiebuyCount: " + CookiebuyCount);
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
@@ -158,14 +156,16 @@ public class StoreManager : MonoBehaviour
             shopGold.text = GameManager.instance.totalMoney.ToString();
 
             purchasedItems.Add(currentItem.ProductName);
-            if (topping.gameObject.activeSelf)
+            purchasedItemData.Add(currentItem.IngButtonImage);
+
+            if (currentItem.ProductLevel == 0)
             {
                 CookiebuyCount++;
+                Debug.Log("CookiebuyCount after purchase: " + CookiebuyCount);
             }
             SavePurchasedItems();
             currentButton.interactable = false;
 
-            // 구매한 항목 버튼 활성화
             foreach (var item in itemArray)
             {
                 if (item != null && item.name == currentItem.IngButtonImage)
@@ -193,42 +193,43 @@ public class StoreManager : MonoBehaviour
     private void SavePurchasedItems()
     {
         PlayerPrefs.SetString("PurchasedItems", string.Join(",", purchasedItems));
+        PlayerPrefs.SetString("PurchasedItemData", string.Join(",", purchasedItemData));
         PlayerPrefs.SetInt("CookiebuyCount", CookiebuyCount);
         PlayerPrefs.Save();
     }
 
-
-
-    public static void ActivatePurchasedItems(Button[] itemArray)
-    {
-        var purchasedItems = LoadPurchasedItems();
-
-        // 구매한 항목 버튼 활성화
-        foreach (var item in itemArray)
-        {
-            if (item != null && purchasedItems.Contains(item.name))
-            {
-                item.interactable = true;
-            }
-        }
-    }
-    //private List<string> LoadPurchasedItems()
-    //{
-    //    var savedItems = PlayerPrefs.GetString("PurchasedItems", "");
-    //    CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0);
-    //    if (!string.IsNullOrEmpty(savedItems))
-    //    {
-    //        return new List<string>(savedItems.Split(','));
-    //    }
-    //    return new List<string>();
-    //}
-    private static List<string> LoadPurchasedItems()
+    public static List<string> LoadPurchasedItems()
     {
         var savedItems = PlayerPrefs.GetString("PurchasedItems", "");
+        Debug.Log("Loaded Purchased Items: " + savedItems);
         if (!string.IsNullOrEmpty(savedItems))
         {
             return new List<string>(savedItems.Split(','));
         }
         return new List<string>();
+    }
+
+    public static List<string> LoadPurchasedItemData()
+    {
+        var savedItemData = PlayerPrefs.GetString("PurchasedItemData", "");
+        Debug.Log("Loaded Purchased Item Data: " + savedItemData);
+        if (!string.IsNullOrEmpty(savedItemData))
+        {
+            return new List<string>(savedItemData.Split(','));
+        }
+        return new List<string>();
+    }
+
+    public void ActivatePurchasedItems()
+    {
+        var purchasedItemData = LoadPurchasedItemData();
+
+        foreach (var item in itemArray)
+        {
+            if (item != null && purchasedItemData.Contains(item.name))
+            {
+                item.interactable = true;
+            }
+        }
     }
 }

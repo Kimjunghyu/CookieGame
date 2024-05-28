@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -14,11 +15,10 @@ public class GameManager : MonoBehaviour
     public GameObject result;
     public GameObject shop;
     public GameObject cookieInfo;
-
+    public Button[] storeItemButtons;
     public Image startImage;
     public Sprite ready;
     public Sprite go;
-
     public TextMeshProUGUI dayText;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI moneyText;
@@ -26,12 +26,9 @@ public class GameManager : MonoBehaviour
     public AudioSource gameBGM;
     public int day { get; set; }
     public int totalMoney { get; set; }
-    public int repute {  get; set; }
-
+    public int repute { get; set; }
     private float second = 0f;
-
     public int customerSpeed { get; set; } = 0;
-
     public int ovenSpeed { get; set; } = 0;
     public int addGold { get; set; } = 0;
     public int resultTotalMoney { get; set; }
@@ -44,6 +41,8 @@ public class GameManager : MonoBehaviour
     public bool bgmPlaying = true;
     public int currCoin = 0;
     public int currRepute = 0;
+    public StoreManager storeManager;
+
     private void Awake()
     {
         Time.timeScale = 1f;
@@ -57,7 +56,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    
+
     private void Start()
     {
         tax = 0;
@@ -68,6 +67,7 @@ public class GameManager : MonoBehaviour
         }
         ResetPlayerPrefs();
         StoreItem.ApplyPurchasedItemsEffect();
+        ActivatePurchasedButtons();
         totalMoney = 99999;
         resultTotalMoney = totalMoney;
         day = 1;
@@ -79,11 +79,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(inGame.gameObject.activeSelf)
+        if (inGame.gameObject.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if(!pause.gameObject.activeSelf)
+                if (!pause.gameObject.activeSelf)
                 {
                     OnClickStop();
                 }
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        if(bgmPlaying)
+        if (bgmPlaying)
         {
             if (mainBGM != null)
             {
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
                 day++;
                 SetStageTimer(day);
                 UpdateUI();
-                if(!result.gameObject.activeSelf)
+                if (!result.gameObject.activeSelf)
                 {
                     isPlaying = false;
                     totalMoney += money;
@@ -158,11 +158,11 @@ public class GameManager : MonoBehaviour
         }
         gameBGM.Play();
     }
+
     public void OnClickStop()
     {
         if (!pause.activeSelf && isPlaying)
         {
-            Time.timeScale = 0f;
             pause.SetActive(true);
             stopButton.interactable = false;
             isPlaying = false;
@@ -191,7 +191,6 @@ public class GameManager : MonoBehaviour
 
             gameOver = true;
         }
-
     }
 
     public void OnClickGameExit()
@@ -202,6 +201,7 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
     public void AddMoney(int amount)
     {
         money += amount;
@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour
             title.SetActive(false);
             stopButton.interactable = true;
         }
-        if(cookieInfo.gameObject.activeSelf)
+        if (cookieInfo.gameObject.activeSelf)
         {
             cookieInfo.gameObject.SetActive(false);
         }
@@ -234,27 +234,27 @@ public class GameManager : MonoBehaviour
 
     private void SetStageTimer(int day)
     {
-        if(day <= 2)
+        if (day <= 2)
         {
             stage = 1;
         }
-        else if(day <=5)
+        else if (day <= 5)
         {
             stage = 2;
         }
-        else if(day <= 9)
+        else if (day <= 9)
         {
             stage = 3;
         }
-        else if(day <= 14)
+        else if (day <= 14)
         {
             stage = 4;
         }
-        else if(day <= 20)
+        else if (day <= 20)
         {
             stage = 5;
         }
-        else if(day <= 24)
+        else if (day <= 24)
         {
             stage = 6;
         }
@@ -262,7 +262,7 @@ public class GameManager : MonoBehaviour
         {
             stage = 7;
         }
-     
+
         StageData stageData = StageDataLoad.instance.GetStageData(stage - 1);
         if (stageData != null)
         {
@@ -283,6 +283,7 @@ public class GameManager : MonoBehaviour
         }
         UpdateTax();
     }
+
     private void UpdateTax()
     {
         ReputeData reputeData = ReputeDataLoad.instance.GetReputeData(repute);
@@ -295,6 +296,7 @@ public class GameManager : MonoBehaviour
             tax = 0;
         }
     }
+
     private void UpdateUI()
     {
         timerText.text = $"{(int)second / 60:D2}:{(int)second % 60:D2}";
@@ -325,7 +327,26 @@ public class GameManager : MonoBehaviour
 
     private void ResetPlayerPrefs()
     {
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.Save();
+        //PlayerPrefs.DeleteAll();
+        //PlayerPrefs.Save();
+    }
+
+    private void ActivatePurchasedButtons()
+    {
+        List<string> purchasedItemData = StoreManager.LoadPurchasedItemData();
+
+        foreach (Button button in storeItemButtons)
+        {
+            if (purchasedItemData.Contains(button.name))
+            {
+                Debug.Log("Button activated: " + button.name);
+                button.interactable = true;
+            }
+            else
+            {
+                Debug.Log("Button not activated: " + button.name);
+                button.interactable = false;
+            }
+        }
     }
 }

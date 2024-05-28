@@ -89,20 +89,23 @@ public class CustomerSetting : MonoBehaviour
 
     private void ApplyReputeData()
     {
-        int currentRepute = GameManager.instance.repute;
-        ReputeData reputeData = ReputeDataLoad.instance.GetReputeData(currentRepute);
-
-        if (reputeData != null)
+        if (GameManager.instance.isPlaying)
         {
-            speed = Random.Range(5 + GameManager.instance.customerSpeed, 7 + GameManager.instance.customerSpeed);
+            int currentRepute = GameManager.instance.repute;
+            ReputeData reputeData = ReputeDataLoad.instance.GetReputeData(currentRepute);
+
+            if (reputeData != null)
+            {
+                speed = Random.Range(5 + GameManager.instance.customerSpeed, 7 + GameManager.instance.customerSpeed);
+            }
         }
     }
 
     private void Update()
     {
-        if (customerTimer != null && !timeOver)
+        if (customerTimer != null && !timeOver && GameManager.instance.isPlaying)
         {
-            customerTimer .value -= speed * Time.deltaTime;
+            customerTimer.value -= speed * Time.deltaTime;
 
             if (customerTimer.value <= 19)
             {
@@ -119,7 +122,7 @@ public class CustomerSetting : MonoBehaviour
 
     private void SetSliderSprite()
     {
-        if (customerTimer != null)
+        if (customerTimer != null && GameManager.instance.isPlaying)
         {
             var image = customerTimer.fillRect.GetComponentInChildren<Image>();
             if (image != null)
@@ -132,7 +135,7 @@ public class CustomerSetting : MonoBehaviour
 
     public void OnClickCustomer()
     {
-        if(customerImage.gameObject.activeSelf)
+        if (GameManager.instance.isPlaying && customerImage.gameObject.activeSelf)
         {
             selectCookie = cookieImage;
             if (selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
@@ -159,7 +162,7 @@ public class CustomerSetting : MonoBehaviour
                 return;
             }
         }
-       else
+        else
         {
             return;
         }

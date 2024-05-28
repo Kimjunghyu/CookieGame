@@ -78,7 +78,7 @@ public class CookieManager : MonoBehaviour
     {
         isPlaying = GameManager.instance.isPlaying;
 
-        if(SelectedCookieImage == null && currentActiveOutline != null)
+        if (SelectedCookieImage == null && currentActiveOutline != null)
         {
             currentActiveOutline.enabled = false;
         }
@@ -401,6 +401,11 @@ public class CookieManager : MonoBehaviour
 
         while (timers[index].value > 0)
         {
+            while (!GameManager.instance.isPlaying)
+            {
+                yield return null;
+            }
+
             timers[index].value -= (30 + GameManager.instance.ovenSpeed) * Time.deltaTime;
             yield return null;
         }
@@ -417,6 +422,11 @@ public class CookieManager : MonoBehaviour
 
         while (burntTimer[index].value > 0)
         {
+            while (!GameManager.instance.isPlaying)
+            {
+                yield return null;
+            }
+
             burntTimer[index].value -= 30 * Time.deltaTime;
             yield return null;
         }
