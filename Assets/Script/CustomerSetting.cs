@@ -91,13 +91,7 @@ public class CustomerSetting : MonoBehaviour
     {
         if (GameManager.instance.isPlaying)
         {
-            int currentRepute = GameManager.instance.repute;
-            ReputeData reputeData = ReputeDataLoad.instance.GetReputeData(currentRepute);
-
-            if (reputeData != null)
-            {
-                speed = Random.Range(5 + GameManager.instance.customerSpeed, 7 + GameManager.instance.customerSpeed);
-            }
+             speed = Random.Range(5 + GameManager.instance.customerSpeed, 7 + GameManager.instance.customerSpeed);
         }
     }
 

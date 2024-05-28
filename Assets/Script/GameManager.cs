@@ -300,7 +300,7 @@ public class GameManager : MonoBehaviour
     private void UpdateUI()
     {
         timerText.text = $"{(int)second / 60:D2}:{(int)second % 60:D2}";
-        dayText.text = $"{day}" + $"{TransrationKr.instance.GetTranslation("Day")}";
+        dayText.text = $"{day}";
         moneyText.text = $"${money}";
     }
 

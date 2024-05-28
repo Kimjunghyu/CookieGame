@@ -30,8 +30,8 @@ public class StoreManager : MonoBehaviour
     private void OnEnable()
     {
         purchasedItems = LoadPurchasedItems();
-        purchasedItemData = LoadPurchasedItemData();
-        CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0);
+        purchasedItemData = LoadPurchasedItemData(); // ingButtonImage를 불러옴
+        CookiebuyCount = PlayerPrefs.GetInt("CookiebuyCount", 0); // 재시작 시 CookiebuyCount 불러오기
 
         if (ShopDataLoad.instance != null)
         {
@@ -55,9 +55,9 @@ public class StoreManager : MonoBehaviour
         int bGradeCount = bGradeItems.Count;
         int aGradeCount = aGradeItems.Count;
 
-        bool showAGradeItems = CookiebuyCount >= 3;
+        bool showAGradeItems = CookiebuyCount >= 3; // A등급 아이템을 보여줄 조건
 
-        Debug.Log("CookiebuyCount: " + CookiebuyCount);
+        Debug.Log("CookiebuyCount: " + CookiebuyCount); // 디버그 로그 추가
 
         for (int i = 0; i < itemSlots.Length; i++)
         {
@@ -118,11 +118,11 @@ public class StoreManager : MonoBehaviour
         TextMeshProUGUI itemNameText = itemNameTransform.GetComponent<TextMeshProUGUI>();
         itemNameText.text = item.ProductName;
 
-        Transform itemImageTransform = slot.transform.Find("itemInfo/Image/itemImage");
+        Transform itemImageTransform = slot.transform.Find("itemInfo/itemImage");
         Image itemImage = itemImageTransform.GetComponent<Image>();
         itemImage.sprite = LoadSprite(item.SpriteId);
 
-        Transform itemInfoTransform = slot.transform.Find("itemInfo/itemInfo/iteminfo");
+        Transform itemInfoTransform = slot.transform.Find("itemInfo/iteminfo");
         TextMeshProUGUI itemInfoText = itemInfoTransform.GetComponent<TextMeshProUGUI>();
         itemInfoText.text = item.ItemInfo;
 
@@ -156,12 +156,12 @@ public class StoreManager : MonoBehaviour
             shopGold.text = GameManager.instance.totalMoney.ToString();
 
             purchasedItems.Add(currentItem.ProductName);
-            purchasedItemData.Add(currentItem.IngButtonImage);
+            purchasedItemData.Add(currentItem.IngButtonImage); // ingButtonImage 추가
 
-            if (currentItem.ProductLevel == 0)
+            if (currentItem.ProductLevel == 0) // B등급 아이템을 구매한 경우에만 증가
             {
                 CookiebuyCount++;
-                Debug.Log("CookiebuyCount after purchase: " + CookiebuyCount);
+                Debug.Log("CookiebuyCount after purchase: " + CookiebuyCount); // 디버그 로그 추가
             }
             SavePurchasedItems();
             currentButton.interactable = false;
@@ -193,7 +193,7 @@ public class StoreManager : MonoBehaviour
     private void SavePurchasedItems()
     {
         PlayerPrefs.SetString("PurchasedItems", string.Join(",", purchasedItems));
-        PlayerPrefs.SetString("PurchasedItemData", string.Join(",", purchasedItemData));
+        PlayerPrefs.SetString("PurchasedItemData", string.Join(",", purchasedItemData)); // ingButtonImage 저장
         PlayerPrefs.SetInt("CookiebuyCount", CookiebuyCount);
         PlayerPrefs.Save();
     }
@@ -201,7 +201,7 @@ public class StoreManager : MonoBehaviour
     public static List<string> LoadPurchasedItems()
     {
         var savedItems = PlayerPrefs.GetString("PurchasedItems", "");
-        Debug.Log("Loaded Purchased Items: " + savedItems);
+        Debug.Log("Loaded Purchased Items: " + savedItems); // 디버그 로그 추가
         if (!string.IsNullOrEmpty(savedItems))
         {
             return new List<string>(savedItems.Split(','));
@@ -212,7 +212,7 @@ public class StoreManager : MonoBehaviour
     public static List<string> LoadPurchasedItemData()
     {
         var savedItemData = PlayerPrefs.GetString("PurchasedItemData", "");
-        Debug.Log("Loaded Purchased Item Data: " + savedItemData);
+        Debug.Log("Loaded Purchased Item Data: " + savedItemData); // 디버그 로그 추가
         if (!string.IsNullOrEmpty(savedItemData))
         {
             return new List<string>(savedItemData.Split(','));

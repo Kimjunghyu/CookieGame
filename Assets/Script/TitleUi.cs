@@ -16,18 +16,18 @@ public class TitleUi : MonoBehaviour
 
     private void Start()
     {
-        titleDay.text = "1" + $"{TransrationKr.instance.GetTranslation("Day")}";
+        titleDay.text = "1";
         titleGold.text = GameManager.instance.totalMoney.ToString();
-        titleRepute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + " : 0";
+        titleRepute.text = "0";
     }
 
     private void OnEnable()
     {
         if (GameManager.instance != null)
         {
-            titleDay.text = $"{GameManager.instance.day}" + $"{TransrationKr.instance.GetTranslation("Day")}";
+            titleDay.text = $"{GameManager.instance.day}";
             titleGold.text = GameManager.instance.totalMoney.ToString();
-            titleRepute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + " : " + GameManager.instance.repute.ToString();
+            titleRepute.text = GameManager.instance.repute.ToString();
         }
     }
 

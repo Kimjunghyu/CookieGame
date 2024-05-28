@@ -27,6 +27,18 @@ public class CustomerManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.instance.isPlaying)
+        {
+            int currentRepute = GameManager.instance.repute;
+            ReputeData reputeData = ReputeDataLoad.instance.GetReputeData(currentRepute);
+
+            if (reputeData != null)
+            {
+                minSpawnTime = reputeData.CusVisitTimerStart;
+                maxSpawnTime = reputeData.CusVisitTimerEnd;
+            }
+        }
+
         if (GameManager.instance.isPlaying && spawnCoroutine == null)
         {
             StartSpawning();
@@ -61,6 +73,8 @@ public class CustomerManager : MonoBehaviour
             yield return new WaitForSeconds(3);
             ActivateRandomCustomer();
             float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
+            Debug.Log(minSpawnTime);
+            Debug.Log(maxSpawnTime);
             yield return new WaitForSeconds(waitTime);
         }
     }

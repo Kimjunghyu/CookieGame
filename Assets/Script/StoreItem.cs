@@ -86,11 +86,11 @@ public class StoreItem : MonoBehaviour
         TextMeshProUGUI itemNameText = itemNameTransform.GetComponent<TextMeshProUGUI>();
         itemNameText.text = item.ProductName;
 
-        Transform itemImageTransform = slot.transform.Find("itemInfo/Image/itemImage");
+        Transform itemImageTransform = slot.transform.Find("itemInfo/itemImage");
         Image itemImage = itemImageTransform.GetComponent<Image>();
         itemImage.sprite = LoadSprite(item.ProductImage);
 
-        Transform itemInfoTransform = slot.transform.Find("itemInfo/itemInfo/iteminfo");
+        Transform itemInfoTransform = slot.transform.Find("itemInfo/iteminfo");
         TextMeshProUGUI itemInfoText = itemInfoTransform.GetComponent<TextMeshProUGUI>();
         itemInfoText.text = item.ProductInfo;
 
@@ -118,7 +118,7 @@ public class StoreItem : MonoBehaviour
 
     public void OnClickBuy()
     {
-        if(item.gameObject.activeSelf)
+        if (item.gameObject.activeSelf)
         {
             var value = currentItem.ProductPrice;
             if (GameManager.instance.totalMoney >= value)
@@ -138,7 +138,7 @@ public class StoreItem : MonoBehaviour
 
             purchasePopup.SetActive(false);
         }
-      
+
     }
 
     public static void ApplyPurchasedItemsEffect()

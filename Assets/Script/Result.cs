@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Result : MonoBehaviour
 {
-    public TextMeshProUGUI day;
     public TextMeshProUGUI totalCoin;
     public TextMeshProUGUI todayCoin;
     public TextMeshProUGUI tax;
@@ -18,8 +17,6 @@ public class Result : MonoBehaviour
 
     private void OnEnable()
     {
-        int currentDay = GameManager.instance.day - 1;
-        day.text = currentDay.ToString() + $"{TransrationKr.instance.GetTranslation("Day")}";
         totalCoin.text = $"{TransrationKr.instance.GetTranslation("Result1")}" + " : " + GameManager.instance.resultTotalMoney.ToString();
         todayCoin.text = $"{TransrationKr.instance.GetTranslation("Result2")}"+" : " + GameManager.instance.money.ToString();
         tax.text = $"{TransrationKr.instance.GetTranslation("Result3")}" + " : " + GameManager.instance.tax.ToString();
