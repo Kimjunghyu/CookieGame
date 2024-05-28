@@ -4985,7 +4985,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -712.717, y: -14.276001}
+  m_AnchoredPosition: {x: -712.71704, y: -14.276001}
   m_SizeDelta: {x: -2769.369, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &342937607
@@ -9142,7 +9142,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1188.651, y: -15}
+  m_AnchoredPosition: {x: -1188.6509, y: -15}
   m_SizeDelta: {x: -2595.509, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &571469174
@@ -27639,6 +27639,13 @@ MonoBehaviour:
   result: {fileID: 1413761999}
   shop: {fileID: 458425854}
   cookieInfo: {fileID: 1428146228}
+  storeItemButtons:
+  - {fileID: 899971103}
+  - {fileID: 881196255}
+  - {fileID: 730605116}
+  - {fileID: 121477102}
+  - {fileID: 2113572846}
+  - {fileID: 860130566}
   startImage: {fileID: 1225165362}
   ready: {fileID: 21300000, guid: 1eeffb45cc279c4479470a50d97ef964, type: 3}
   go: {fileID: 21300000, guid: 5f36615ee1d39c74c90b951783ec14e5, type: 3}
@@ -27651,6 +27658,7 @@ MonoBehaviour:
   bgmPlaying: 1
   currCoin: 0
   currRepute: 0
+  storeManager: {fileID: 0}
 --- !u!114 &1726805250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27667,6 +27675,7 @@ MonoBehaviour:
   mainCamera: {fileID: 1761771397}
   particleCamera: {fileID: 412507724}
   poolSize: 10
+  minTouchMovement: 10
 --- !u!82 &1726805251
 AudioSource:
   m_ObjectHideFlags: 0
