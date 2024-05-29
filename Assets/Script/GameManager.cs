@@ -79,6 +79,10 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            ResetPlayerPrefs();
+        }
         if (inGame.gameObject.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -327,8 +331,8 @@ public class GameManager : MonoBehaviour
 
     private void ResetPlayerPrefs()
     {
-        //PlayerPrefs.DeleteAll();
-        //PlayerPrefs.Save();
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.Save();
     }
 
     private void ActivatePurchasedButtons()
