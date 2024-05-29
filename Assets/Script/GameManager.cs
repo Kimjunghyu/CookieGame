@@ -22,8 +22,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI dayText;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI reputeText;
     public AudioSource mainBGM;
     public AudioSource gameBGM;
+
     public int day { get; set; }
     public int totalMoney { get; set; }
     public int repute { get; set; }
@@ -66,7 +68,7 @@ public class GameManager : MonoBehaviour
             PlayMainBGM();
         }
         LoadGameData();
-        //ResetPlayerPrefs();
+        ResetPlayerPrefs();
         StoreItem.ApplyPurchasedItemsEffect();
         ActivatePurchasedButtons();
         UpdateUI();
@@ -213,6 +215,7 @@ public class GameManager : MonoBehaviour
     public void OnClickStart()
     {
         repute = currRepute;
+        reputeText.text = $"{repute}";
         money = 0;
         SetStageTimer(day);
         UpdateUI();
@@ -279,9 +282,11 @@ public class GameManager : MonoBehaviour
     public void SetRepute(int value)
     {
         repute += value;
+        reputeText.text = $"{repute}";
         if (repute < 0)
         {
             repute = 0;
+            reputeText.text = $"{repute}";
         }
         UpdateTax();
     }
@@ -385,6 +390,14 @@ public class GameManager : MonoBehaviour
         else
         {
             currRepute = 0;
+        }
+    }
+
+    public void Resetbutton()
+    {
+        foreach (Button button in storeItemButtons)
+        {
+            button.interactable = false;
         }
     }
 }

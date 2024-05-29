@@ -23,10 +23,6 @@ public class Result : MonoBehaviour
         tax.text = $"{TransrationKr.instance.GetTranslation("Result3")}" + " : " + GameManager.instance.tax.ToString();
         resultCoin.text = $"{TransrationKr.instance.GetTranslation("Result4")}" + " :" + GameManager.instance.currCoin.ToString();
         repute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + $" : {beforeRepute} ¢º {GameManager.instance.repute}";
-        if(GameManager.instance.resultTotalMoney > 500)
-        {
-            ending.gameObject.SetActive(true);
-        }
     }
 
     private void OnDisable()
@@ -34,15 +30,22 @@ public class Result : MonoBehaviour
         GameManager.instance.totalMoney = GameManager.instance.currCoin;
         GameManager.instance.resultTotalMoney = GameManager.instance.currCoin;
         beforeRepute = GameManager.instance.repute;
+        if (GameManager.instance.resultTotalMoney > 500)
+        {
+            ending.gameObject.SetActive(true);
+        }
+        else
+        {
+            title.gameObject.SetActive(true);
+        }
     }
     public void OnClickNext()
     {
         gameObject.SetActive(false);
-        if(!title.gameObject.activeSelf )
+        if(!title.gameObject.activeSelf)
         {
             GameManager.instance.money = 0;
-            title.gameObject.SetActive(true);
-            if(!cookieInfo.gameObject.activeSelf && GameManager.instance.day >1)
+            if(!cookieInfo.gameObject.activeSelf && GameManager.instance.day >1 && !ending.gameObject.activeSelf)
             {
                 cookieInfo.gameObject.SetActive(true);
             }

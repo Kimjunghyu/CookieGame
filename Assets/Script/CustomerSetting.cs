@@ -91,7 +91,7 @@ public class CustomerSetting : MonoBehaviour
     {
         if (GameManager.instance.isPlaying)
         {
-             speed = Random.Range(5 + GameManager.instance.customerSpeed, 7 + GameManager.instance.customerSpeed);
+             speed = Random.Range(5 - GameManager.instance.customerSpeed, 7 - GameManager.instance.customerSpeed);
         }
     }
 
@@ -164,7 +164,7 @@ public class CustomerSetting : MonoBehaviour
 
     private void HandleCustomerInteraction(int coinAmount, int reputeChange)
     {
-        CookieManager.Instance.SelectedCookieImage = null;
+        //CookieManager.Instance.SelectedCookieImage = null;
         foreach (var go in customer)
         {
             go.gameObject.SetActive(false);
