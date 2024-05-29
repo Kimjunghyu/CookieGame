@@ -32,10 +32,14 @@ public class EndingUi : MonoBehaviour
     public void OnClickQuit()
     {
         GameManager.instance.ResetPlayerPrefs();
+        //PlayerPrefs.SetInt("tutorialPlay", 1);
+        //PlayerPrefs.SetInt("openingShown", 1);
+        //PlayerPrefs.Save();
         GameManager.instance.Resetbutton();
         GameManager.instance.day = 1;
         GameManager.instance.totalMoney = 0;
         GameManager.instance.repute = 0;
+        GameManager.instance.currRepute = 0;
         GameManager.instance.SaveGameData();
         if(result.gameObject.activeSelf)
         {

@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     public bool isPlaying { get; set; }
     public bool bgmPlaying = true;
     public int currCoin = 0;
-    public int currRepute = 0;
+    public int currRepute { get; set; }
     public GameObject opening;
 
     private void Awake()
@@ -64,12 +64,11 @@ public class GameManager : MonoBehaviour
     {
         tax = 0;
         bgmValue = 1f;
-        if (title.activeSelf)
-        {
-            PlayMainBGM();
-        }
+
+        PlayMainBGM();
+
         LoadGameData();
-        ResetPlayerPrefs();
+        //ResetPlayerPrefs();
         StoreItem.ApplyPurchasedItemsEffect();
         ActivatePurchasedButtons();
         UpdateUI();
@@ -381,7 +380,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            totalMoney = 99999;
+            totalMoney = 0;
         }
 
         if (PlayerPrefs.HasKey("currRepute"))

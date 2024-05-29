@@ -7,17 +7,30 @@ public class TodayCookieInfo : MonoBehaviour
 {
     public Image[] images;
     public Sprite[] cookies;
+    public Sprite empty;
     private int count = 0;
+    private int currentStage = 0;
 
     private void OnEnable()
     {
-        int currentStage = GameManager.instance.stage;
+        for(int i = 0; i < images.Length; ++i)
+        {
+            images[i].sprite = empty;
+        }
+        if(GameManager.instance.stage != 0)
+        {
+            currentStage = GameManager.instance.stage;
+        }
+        else
+        {
+            currentStage = 1;
+        }
         StageData stageData = StageDataLoad.instance.GetStageData(currentStage - 1);
         if (stageData != null)
         {
             int cookieStart = stageData.cookieStart;
             int cookieEnd = stageData.cookieEnd;
-            for(int i = 6; i <= 17; i++)
+            for(int i = cookieStart; i <= cookieEnd; i++)
             {
                 if (!images[count].gameObject.activeSelf)
                 {
@@ -29,7 +42,7 @@ public class TodayCookieInfo : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         }
     }
 
