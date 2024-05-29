@@ -65,24 +65,16 @@ public class GameManager : MonoBehaviour
         {
             PlayMainBGM();
         }
-        ResetPlayerPrefs();
+        LoadGameData();
+      //  ResetPlayerPrefs();
         StoreItem.ApplyPurchasedItemsEffect();
         ActivatePurchasedButtons();
-        totalMoney = 99999;
-        resultTotalMoney = totalMoney;
-        day = 1;
-        stage = 0;
-        SetStageTimer(day);
         UpdateUI();
         UpdateTax();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha0))
-        {
-            ResetPlayerPrefs();
-        }
         if (inGame.gameObject.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -199,6 +191,7 @@ public class GameManager : MonoBehaviour
 
     public void OnClickGameExit()
     {
+        SaveGameData();
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
 #else
@@ -351,6 +344,44 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Button not activated: " + button.name);
                 button.interactable = false;
             }
+        }
+    }
+
+    public void SaveGameData()
+    {
+        PlayerPrefs.SetInt("day", day);
+        PlayerPrefs.SetInt("totalMoney", totalMoney);
+        PlayerPrefs.SetInt("currRepute", currRepute);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadGameData()
+    {
+        if (PlayerPrefs.HasKey("day"))
+        {
+            day = PlayerPrefs.GetInt("day");
+        }
+        else
+        {
+            day = 1;
+        }
+
+        if (PlayerPrefs.HasKey("totalMoney"))
+        {
+            totalMoney = PlayerPrefs.GetInt("totalMoney");
+        }
+        else
+        {
+            totalMoney = 99999;
+        }
+
+        if (PlayerPrefs.HasKey("currRepute"))
+        {
+            currRepute = PlayerPrefs.GetInt("currRepute");
+        }
+        else
+        {
+            currRepute = 0;
         }
     }
 }

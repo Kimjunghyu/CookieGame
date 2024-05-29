@@ -16,9 +16,13 @@ public class TitleUi : MonoBehaviour
 
     private void Start()
     {
-        titleDay.text = "1";
-        titleGold.text = GameManager.instance.totalMoney.ToString();
-        titleRepute.text = "0";
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.LoadGameData();
+            titleDay.text = $"{GameManager.instance.day}";
+            titleGold.text = GameManager.instance.totalMoney.ToString();
+            titleRepute.text = GameManager.instance.repute.ToString();
+        }
     }
 
     private void OnEnable()

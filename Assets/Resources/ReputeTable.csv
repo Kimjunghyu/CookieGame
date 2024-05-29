@@ -1,5 +1,5 @@
 ReputeID,ReputeStStart,ReputeStEnd,CusVisitTimerStart,CusVisitTimerEnd,Tax
-0,0,19,5,9,150
+0,0,19,1,1,150
 1,20,49,4,8,200
 2,50,79,4,7,300
 3,80,109,3,6,500

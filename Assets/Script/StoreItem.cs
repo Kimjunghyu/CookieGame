@@ -127,6 +127,7 @@ public class StoreItem : MonoBehaviour
                 shopGold.text = GameManager.instance.totalMoney.ToString();
                 purchasedItem.Add(currentItem.ProductName);
                 SavePurchasedItems();
+                GameManager.instance.SaveGameData();
                 currentButton.interactable = false;
                 SetItems();
                 ApplyItemEffect(currentItem);

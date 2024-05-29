@@ -164,6 +164,7 @@ public class StoreManager : MonoBehaviour
                 Debug.Log("CookiebuyCount after purchase: " + CookiebuyCount); // 디버그 로그 추가
             }
             SavePurchasedItems();
+            GameManager.instance.SaveGameData();
             currentButton.interactable = false;
 
             foreach (var item in itemArray)
