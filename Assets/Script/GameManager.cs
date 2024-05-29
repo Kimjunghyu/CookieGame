@@ -322,7 +322,7 @@ public class GameManager : MonoBehaviour
         isPlaying = true;
     }
 
-    private void ResetPlayerPrefs()
+    public void ResetPlayerPrefs()
     {
         PlayerPrefs.DeleteAll();
         PlayerPrefs.Save();
