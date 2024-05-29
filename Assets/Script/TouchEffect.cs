@@ -9,6 +9,8 @@ public class TouchEffect : MonoBehaviour
     public Camera particleCamera;
     public int poolSize = 10;
     public float minTouchMovement = 10f;
+    public AudioSource audioSource;
+    public AudioClip effectSound;
 
     private List<GameObject> particlePool = new List<GameObject>();
     private Vector3 lastTouchPosition;
@@ -85,6 +87,10 @@ public class TouchEffect : MonoBehaviour
             if (ps != null)
             {
                 ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                if (GameManager.instance.soundEffect)
+                {
+                    audioSource.PlayOneShot(effectSound);
+                }
                 ps.Play();
                 StartCoroutine(ReturnToPool(particleEffect, ps.main.duration + ps.main.startLifetime.constantMax - 2f));
             }

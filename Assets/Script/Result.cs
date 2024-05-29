@@ -30,7 +30,7 @@ public class Result : MonoBehaviour
         GameManager.instance.totalMoney = GameManager.instance.currCoin;
         GameManager.instance.resultTotalMoney = GameManager.instance.currCoin;
         beforeRepute = GameManager.instance.repute;
-        if (GameManager.instance.resultTotalMoney > 500)
+        if (GameManager.instance.resultTotalMoney > 25000)
         {
             ending.gameObject.SetActive(true);
         }
@@ -41,15 +41,8 @@ public class Result : MonoBehaviour
     }
     public void OnClickNext()
     {
+        GameManager.instance.money = 0;
         gameObject.SetActive(false);
-        if(!title.gameObject.activeSelf)
-        {
-            GameManager.instance.money = 0;
-            if(!cookieInfo.gameObject.activeSelf && GameManager.instance.day >1 && !ending.gameObject.activeSelf)
-            {
-                cookieInfo.gameObject.SetActive(true);
-            }
-        }
     }
 
 }

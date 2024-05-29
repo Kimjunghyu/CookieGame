@@ -13,7 +13,7 @@ public class TitleUi : MonoBehaviour
     public TextMeshProUGUI titleRepute;
     public Slider volumeValue;
     public Toggle volumeToggle;
-
+    public Toggle effectSoundToggle;
     private void Start()
     {
         if (GameManager.instance != null)
@@ -56,6 +56,15 @@ public class TitleUi : MonoBehaviour
         {
             GameManager.instance.bgmValue = volumeValue.value;
             GameManager.instance.bgmPlaying = volumeToggle.isOn;
+        }
+
+        if(effectSoundToggle.isOn)
+        {
+            GameManager.instance.soundEffect = true;
+        }
+        else
+        {
+            GameManager.instance.soundEffect = false;
         }
     }
 

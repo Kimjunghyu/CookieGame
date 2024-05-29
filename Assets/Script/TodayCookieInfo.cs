@@ -17,7 +17,7 @@ public class TodayCookieInfo : MonoBehaviour
         {
             int cookieStart = stageData.cookieStart;
             int cookieEnd = stageData.cookieEnd;
-            for(int i = cookieStart; i <= cookieEnd; i++)
+            for(int i = 6; i <= 17; i++)
             {
                 if (!images[count].gameObject.activeSelf)
                 {
@@ -36,16 +36,5 @@ public class TodayCookieInfo : MonoBehaviour
     private void OnDisable()
     {
         count = 0;
-    }
-    private void Update()
-    {
-        if(Input.touchCount > 0)
-        {
-            gameObject.SetActive(false);
-        }
-        if(Input.GetMouseButton(0))
-        {
-            gameObject.SetActive(false);
-        }
     }
 }

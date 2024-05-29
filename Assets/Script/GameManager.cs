@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public int money { get; set; }
     public int stage { get; private set; }
     public int tax { get; set; }
+    public bool soundEffect {  get; set; }
     public float bgmValue { get; set; }
     public bool gameOver = false;
     public bool isPlaying { get; set; }
@@ -390,6 +391,22 @@ public class GameManager : MonoBehaviour
         else
         {
             currRepute = 0;
+        }
+    }
+
+    public void OnClickInfo()
+    {
+        if(!cookieInfo.gameObject.activeSelf)
+        {
+            cookieInfo.gameObject.SetActive(true);
+        }
+    }
+
+    public void InfoQuit()
+    {
+        if (cookieInfo.gameObject.activeSelf)
+        {
+            cookieInfo.gameObject.SetActive(false);
         }
     }
 

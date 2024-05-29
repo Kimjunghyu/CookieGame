@@ -23,7 +23,7 @@ public class OpeningUI : MonoBehaviour
         while (count < opImage.Length)
         {
             image.sprite = opImage[count++];
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(3);
         }
         if(!button.gameObject.activeSelf)
         {

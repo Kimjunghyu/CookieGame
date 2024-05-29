@@ -10,6 +10,11 @@ public class CookieManager : MonoBehaviour
     public Image SelectedCookieImage { get; set; }
     public bool resultCookieSelect { get; set; }
 
+
+    public AudioClip doughSound;
+    public AudioClip toppingSound;
+    public AudioClip ovenSound;
+    private AudioSource audioSource;
     public Slider[] timers;
     public Slider[] burntTimer;
 
@@ -44,8 +49,14 @@ public class CookieManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        audioSource = GetComponent<AudioSource>();
     }
 
+    private void OnEnable()
+    {
+        SelectedCookieImage = null;
+        resultCookieSelect = false;
+    }
     private void OnDisable()
     {
         foreach (var item in images)
@@ -95,6 +106,10 @@ public class CookieManager : MonoBehaviour
                     images[i].gameObject.SetActive(true);
                     images[i].sprite = prefabDoughC;
                     images[i].tag = "Untagged";
+                    if(GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(doughSound);
+                    }
                     break;
                 }
             }
@@ -114,6 +129,10 @@ public class CookieManager : MonoBehaviour
                     images[i].gameObject.SetActive(true);
                     images[i].sprite = prefabDoughB;
                     images[i].tag = "Untagged";
+                    if(GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(doughSound);
+                    }
                     break;
                 }
             }
@@ -133,6 +152,10 @@ public class CookieManager : MonoBehaviour
                     images[i].gameObject.SetActive(true);
                     images[i].sprite = prefabDoughA;
                     images[i].tag = "Untagged";
+                    if (GameManager.instance.soundEffect)
+                    { 
+                        audioSource.PlayOneShot(doughSound);
+                    }
                     break;
                 }
             }
@@ -152,6 +175,10 @@ public class CookieManager : MonoBehaviour
                 {
                     images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
+                    if(GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(toppingSound);
+                    }
                     break;
                 }
             }
@@ -170,6 +197,10 @@ public class CookieManager : MonoBehaviour
                 {
                     images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(toppingSound);
+                    }
                     break;
                 }
             }
@@ -188,6 +219,10 @@ public class CookieManager : MonoBehaviour
                 {
                     images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(toppingSound);
+                    }
                     break;
                 }
             }
@@ -206,6 +241,10 @@ public class CookieManager : MonoBehaviour
                 {
                     images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(toppingSound);
+                    }
                     break;
                 }
             }
@@ -224,6 +263,10 @@ public class CookieManager : MonoBehaviour
                 {
                     images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(toppingSound);
+                    }
                     break;
                 }
             }
@@ -242,6 +285,10 @@ public class CookieManager : MonoBehaviour
                 {
                     images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(toppingSound);
+                    }
                     break;
                 }
             }
@@ -406,7 +453,7 @@ public class CookieManager : MonoBehaviour
                 yield return null;
             }
 
-            timers[index].value -= 30 * Time.deltaTime;
+            timers[index].value -= (30+ GameManager.instance.ovenSpeed) * Time.deltaTime;
             yield return null;
         }
 
@@ -417,6 +464,10 @@ public class CookieManager : MonoBehaviour
 
     private IEnumerator StartBurnt(int index, Image ovenImage)
     {
+        if (GameManager.instance.soundEffect)
+        {
+            audioSource.PlayOneShot(ovenSound);
+        }
         burntTimer[index].gameObject.SetActive(true);
         burntTimer[index].value = 100;
 
@@ -427,7 +478,7 @@ public class CookieManager : MonoBehaviour
                 yield return null;
             }
 
-            burntTimer[index].value -= (30 - GameManager.instance.ovenSpeed) * Time.deltaTime;
+            burntTimer[index].value -= 30  * Time.deltaTime;
             yield return null;
         }
         ovenImage.sprite = burntCookie;

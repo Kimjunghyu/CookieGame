@@ -11,7 +11,9 @@ public class CustomerSetting : MonoBehaviour
     public Image customerImage;
     public Sprite lowTimerSprite;
     public Slider customerTimer;
-
+    public AudioClip goodSound;
+    public AudioClip badSound;
+    private AudioSource audioSource;
     private Image[] customer;
     public TextMeshProUGUI coin;
 
@@ -26,6 +28,10 @@ public class CustomerSetting : MonoBehaviour
     private Coroutine printCoinCoroutine;
     private bool timeOver = false;
 
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     private void Start()
     {
         if (!gameObject.activeSelf)
@@ -109,7 +115,11 @@ public class CustomerSetting : MonoBehaviour
             if (customerTimer.value <= 0)
             {
                 timeOver = true;
-                HandleCustomerInteraction(0, -1);
+                if (GameManager.instance.soundEffect)
+                {
+                    audioSource.PlayOneShot(badSound);
+                }
+                TimeOverCustomerInteraction(0, -1);
             }
         }
     }
@@ -131,20 +141,37 @@ public class CustomerSetting : MonoBehaviour
     {
         if (GameManager.instance.isPlaying && customerImage.gameObject.activeSelf)
         {
+            if (!CookieManager.Instance.resultCookieSelect || CookieManager.Instance.SelectedCookieImage == null)
+            {
+                return;
+            }
+            
             selectCookie = cookieImage;
             if (selectCookie != null && CookieManager.Instance.SelectedCookieImage != null)
             {
                 if (selectCookie.sprite.name == CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
                 {
                     HandleCustomerInteraction(100 + GameManager.instance.addGold, 1);
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(goodSound);
+                    }
                 }
                 else if (CookieManager.Instance.SelectedCookieImage.sprite.name == CookieManager.Instance.burntCookie.name && CookieManager.Instance.resultCookieSelect)
                 {
                     HandleCustomerInteraction(10 + GameManager.instance.addGold, -1);
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(badSound);
+                    }
                 }
                 else if (selectCookie.sprite.name != CookieManager.Instance.SelectedCookieImage.sprite.name && CookieManager.Instance.resultCookieSelect)
                 {
                     HandleCustomerInteraction(50 + GameManager.instance.addGold, -1);
+                    if (GameManager.instance.soundEffect)
+                    {
+                        audioSource.PlayOneShot(badSound);
+                    }
                 }
                 else
                 {
@@ -164,6 +191,7 @@ public class CustomerSetting : MonoBehaviour
 
     private void HandleCustomerInteraction(int coinAmount, int reputeChange)
     {
+        timeOver = true;
         CookieManager.Instance.SelectedCookieImage = null;
         foreach (var go in customer)
         {
@@ -181,6 +209,25 @@ public class CustomerSetting : MonoBehaviour
         }
         printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
         CookieManager.Instance.OnClickTrash();
+    }
+
+    private void TimeOverCustomerInteraction(int coinAmount, int reputeChange)
+    {
+        foreach (var go in customer)
+        {
+            go.gameObject.SetActive(false);
+        }
+
+        addCoin = coinAmount;
+        repute = reputeChange;
+        GameManager.instance.SetRepute(repute);
+        GameManager.instance.AddMoney(addCoin);
+
+        if (printCoinCoroutine != null)
+        {
+            StopCoroutine(printCoinCoroutine);
+        }
+        printCoinCoroutine = StartCoroutine(PrintCoin(addCoin, repute));
     }
 
     private IEnumerator PrintCoin(int coinvalue, int reputevalue)
