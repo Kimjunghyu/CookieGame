@@ -13,6 +13,7 @@ public class Result : MonoBehaviour
 
     public GameObject title;
     public GameObject cookieInfo;
+    public GameObject ending;
     int beforeRepute = 0;
 
     private void OnEnable()
@@ -22,6 +23,10 @@ public class Result : MonoBehaviour
         tax.text = $"{TransrationKr.instance.GetTranslation("Result3")}" + " : " + GameManager.instance.tax.ToString();
         resultCoin.text = $"{TransrationKr.instance.GetTranslation("Result4")}" + " :" + GameManager.instance.currCoin.ToString();
         repute.text = $"{TransrationKr.instance.GetTranslation("Repute")}" + $" : {beforeRepute} ¢º {GameManager.instance.repute}";
+        if(GameManager.instance.resultTotalMoney > 500)
+        {
+            ending.gameObject.SetActive(true);
+        }
     }
 
     private void OnDisable()

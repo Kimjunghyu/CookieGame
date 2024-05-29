@@ -32,7 +32,6 @@ public class StoreItem : MonoBehaviour
             SetItems();
         }
 
-        shopGold.text = "0";
         if (GameManager.instance != null)
         {
             shopGold.text = GameManager.instance.totalMoney.ToString();

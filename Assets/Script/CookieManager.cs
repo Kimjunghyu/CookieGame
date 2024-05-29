@@ -406,7 +406,7 @@ public class CookieManager : MonoBehaviour
                 yield return null;
             }
 
-            timers[index].value -= (30 + GameManager.instance.ovenSpeed) * Time.deltaTime;
+            timers[index].value -= 30 * Time.deltaTime;
             yield return null;
         }
 
@@ -427,7 +427,7 @@ public class CookieManager : MonoBehaviour
                 yield return null;
             }
 
-            burntTimer[index].value -= 30 * Time.deltaTime;
+            burntTimer[index].value -= (30 - GameManager.instance.ovenSpeed) * Time.deltaTime;
             yield return null;
         }
         ovenImage.sprite = burntCookie;

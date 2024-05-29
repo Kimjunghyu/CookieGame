@@ -6,15 +6,15 @@ public class OpeningUI : MonoBehaviour
 {
     public Image image;
     public Sprite[] opImage;
-    public CanvasGroup canvasGroup;
     public Button button;
     private int count = 0;
-
     private void OnEnable()
     {
-        button.gameObject.SetActive(false);
+        if(button.gameObject.activeSelf)
+        {
+            button.gameObject.SetActive(false);
+        }
         count = 0;
-        canvasGroup.alpha = 1f;
         StartCoroutine(StartOp());
     }
 
@@ -23,9 +23,13 @@ public class OpeningUI : MonoBehaviour
         while (count < opImage.Length)
         {
             image.sprite = opImage[count++];
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
         }
-        button.gameObject.SetActive(true);
+        if(!button.gameObject.activeSelf)
+        {
+            button.gameObject.SetActive(true);
+        }
+        OnFadeOutComplete();
     }
 
     public void OnClickQuit()
@@ -35,9 +39,10 @@ public class OpeningUI : MonoBehaviour
 
     private IEnumerator FadeOutAndDisable()
     {
-        float duration = 2f;
+        float duration = 1f;
         float elapsedTime = 0f;
 
+        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
         while (elapsedTime < duration)
         {
             canvasGroup.alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration);
@@ -47,5 +52,12 @@ public class OpeningUI : MonoBehaviour
 
         canvasGroup.alpha = 0f;
         gameObject.SetActive(false);
+        OnFadeOutComplete();
+    }
+
+    private void OnFadeOutComplete()
+    {
+        PlayerPrefs.SetInt("openingShown", 1);
+        PlayerPrefs.Save();
     }
 }

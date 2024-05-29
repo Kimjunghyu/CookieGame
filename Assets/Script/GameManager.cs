@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     public bool bgmPlaying = true;
     public int currCoin = 0;
     public int currRepute = 0;
-    public StoreManager storeManager;
+    public GameObject opening;
 
     private void Awake()
     {
@@ -66,11 +66,16 @@ public class GameManager : MonoBehaviour
             PlayMainBGM();
         }
         LoadGameData();
-      //  ResetPlayerPrefs();
+        //ResetPlayerPrefs();
         StoreItem.ApplyPurchasedItemsEffect();
         ActivatePurchasedButtons();
         UpdateUI();
         UpdateTax();
+
+        if (!PlayerPrefs.HasKey("openingShown") || PlayerPrefs.GetInt("openingShown") == 0)
+        {
+            opening.SetActive(true);
+        }
     }
 
     private void Update()
@@ -336,12 +341,10 @@ public class GameManager : MonoBehaviour
         {
             if (purchasedItemData.Contains(button.name))
             {
-                Debug.Log("Button activated: " + button.name);
                 button.interactable = true;
             }
             else
             {
-                Debug.Log("Button not activated: " + button.name);
                 button.interactable = false;
             }
         }
