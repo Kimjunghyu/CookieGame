@@ -14,6 +14,8 @@ public class TitleUi : MonoBehaviour
     public Slider volumeValue;
     public Toggle volumeToggle;
     public Toggle effectSoundToggle;
+
+    private int testCount = 0;
     private void Start()
     {
         if (GameManager.instance != null)
@@ -90,7 +92,19 @@ public class TitleUi : MonoBehaviour
     {
         if (option.activeSelf)
         {
+            testCount = 0;
             option.SetActive(false);
+        }
+    }
+
+    public void OnClickTestCount()
+    {
+        testCount++;
+        if(testCount > 4)
+        {
+            Debug.Log("reset");
+            GameManager.instance.ResetPlayerPrefs();
+            OnClickOptionQuit();
         }
     }
 }

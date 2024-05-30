@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
     public int currRepute { get; set; }
     public GameObject opening;
 
+
     private void Awake()
     {
         Time.timeScale = 1f;
