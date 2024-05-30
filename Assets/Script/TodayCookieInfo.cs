@@ -10,6 +10,7 @@ public class TodayCookieInfo : MonoBehaviour
     public Sprite empty;
     private int count = 0;
     private int currentStage = 0;
+    private int day = 0;
 
     private void OnEnable()
     {
@@ -17,14 +18,18 @@ public class TodayCookieInfo : MonoBehaviour
         {
             images[i].sprite = empty;
         }
-        if(GameManager.instance.stage != 0)
+        if (PlayerPrefs.HasKey("day"))
         {
-            currentStage = GameManager.instance.stage;
+            day = PlayerPrefs.GetInt("day");
         }
         else
         {
-            currentStage = 1;
+            day = 1;
         }
+
+        GameManager.instance.SetStageTimer(day);
+        currentStage = GameManager.instance.stage;
+
         StageData stageData = StageDataLoad.instance.GetStageData(currentStage - 1);
         if (stageData != null)
         {

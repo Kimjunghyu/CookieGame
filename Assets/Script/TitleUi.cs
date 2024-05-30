@@ -101,10 +101,10 @@ public class TitleUi : MonoBehaviour
     {
         testCount++;
         if(testCount > 4)
-        {
-            Debug.Log("reset");
+        {   
             GameManager.instance.ResetPlayerPrefs();
-            OnClickOptionQuit();
+            GameManager.instance.OnClickGameExit();
+
         }
     }
 }

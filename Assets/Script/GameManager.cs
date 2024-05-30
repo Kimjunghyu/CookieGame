@@ -238,7 +238,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SetStageTimer(int day)
+    public void SetStageTimer(int day)
     {
         if (day <= 2)
         {
@@ -387,6 +387,7 @@ public class GameManager : MonoBehaviour
         if (PlayerPrefs.HasKey("currRepute"))
         {
             currRepute = PlayerPrefs.GetInt("currRepute");
+            repute = currRepute;
         }
         else
         {
