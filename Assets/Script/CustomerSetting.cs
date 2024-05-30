@@ -107,7 +107,7 @@ public class CustomerSetting : MonoBehaviour
         {
             customerTimer.value -= speed * Time.deltaTime;
 
-            if (customerTimer.value <= 19)
+            if (customerTimer.value <= 15)
             {
                 SetSliderSprite();
             }

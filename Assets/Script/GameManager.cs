@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         PlayMainBGM();
 
         LoadGameData();
-        //ResetPlayerPrefs();
+        ResetPlayerPrefs();
         StoreItem.ApplyPurchasedItemsEffect();
         ActivatePurchasedButtons();
         UpdateUI();

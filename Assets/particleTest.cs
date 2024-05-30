@@ -10,7 +10,6 @@ public class particleTest : MonoBehaviour
     {
         if (particleSystem != null)
         {
-            Debug.Log("Play");
             particleSystem.Play();
         }
         else

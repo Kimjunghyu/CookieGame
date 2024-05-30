@@ -70,11 +70,8 @@ public class CustomerManager : MonoBehaviour
     {
         while (GameManager.instance.isPlaying)
         {
-            //yield return new WaitForSeconds(3);
             ActivateRandomCustomer();
             float waitTime = Random.Range(minSpawnTime, maxSpawnTime);
-            Debug.Log(minSpawnTime);
-            Debug.Log(maxSpawnTime);
             yield return new WaitForSeconds(waitTime);
         }
     }

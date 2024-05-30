@@ -174,15 +174,12 @@ public class StoreItem : MonoBehaviour
         {
             case 0:
                 GameManager.instance.customerSpeed += item.EffectValue;
-                Debug.Log("1");
                 break;
             case 1:
                 GameManager.instance.addGold += item.EffectValue;
-                Debug.Log("2");
                 break;
             case 2:
                 GameManager.instance.ovenSpeed += item.EffectValue;
-                Debug.Log("3");
                 break;
             default:
                 break;
