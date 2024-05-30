@@ -107,7 +107,7 @@ public class CustomerSetting : MonoBehaviour
     {
         if (GameManager.instance.isPlaying)
         {
-             speed = Random.Range(7 - GameManager.instance.customerSpeed, 9 - GameManager.instance.customerSpeed);
+             speed = Random.Range(9 - GameManager.instance.customerSpeed, 11 - GameManager.instance.customerSpeed);
         }
     }
 
