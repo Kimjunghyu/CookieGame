@@ -17,6 +17,8 @@ public class CustomerSetting : MonoBehaviour
     private Image[] customer;
     public TextMeshProUGUI coin;
 
+    public Image textBox;
+
     public float speed;
     public Sprite maxValueImage;
     public Image cookieImage;
@@ -45,6 +47,14 @@ public class CustomerSetting : MonoBehaviour
         ApplyReputeData();
         customer = GetComponentsInChildren<Image>();
 
+        if(!textBox.gameObject.activeSelf)
+        {
+            textBox.gameObject.SetActive(true);
+        }
+        if(!cookieImage.gameObject.activeSelf)
+        {
+            cookieImage.gameObject.SetActive(true);
+        }
         if (!customerImage.gameObject.activeSelf && customerImage != null)
         {
             customerImage.gameObject.SetActive(true);
@@ -97,7 +107,7 @@ public class CustomerSetting : MonoBehaviour
     {
         if (GameManager.instance.isPlaying)
         {
-             speed = Random.Range(7 + GameManager.instance.customerSpeed, 9 + GameManager.instance.customerSpeed);
+             speed = Random.Range(7 - GameManager.instance.customerSpeed, 9 - GameManager.instance.customerSpeed);
         }
     }
 

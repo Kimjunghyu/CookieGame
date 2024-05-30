@@ -10,7 +10,6 @@ public class CookieManager : MonoBehaviour
     public Image SelectedCookieImage { get; set; }
     public bool resultCookieSelect { get; set; }
 
-
     public AudioClip doughSound;
     public AudioClip toppingSound;
     public AudioClip ovenSound;
@@ -33,6 +32,10 @@ public class CookieManager : MonoBehaviour
 
     private Image tempImage;
 
+    private bool[] isBaking;
+    private Coroutine[] bakingCoroutines;
+    private Coroutine[] burningCoroutines;
+
     private int value = 0;
     private bool isPlaying = false;
 
@@ -50,6 +53,9 @@ public class CookieManager : MonoBehaviour
             Destroy(gameObject);
         }
         audioSource = GetComponent<AudioSource>();
+        isBaking = new bool[ovenImage.Length];
+        bakingCoroutines = new Coroutine[ovenImage.Length];
+        burningCoroutines = new Coroutine[ovenImage.Length];
     }
 
     private void OnEnable()
@@ -57,6 +63,7 @@ public class CookieManager : MonoBehaviour
         SelectedCookieImage = null;
         resultCookieSelect = false;
     }
+
     private void OnDisable()
     {
         foreach (var item in images)
@@ -75,14 +82,25 @@ public class CookieManager : MonoBehaviour
             tableButtonImage.color = Color.white;
         }
         foreach (var item in burntTimer)
+        {
             item.gameObject.SetActive(false);
+        }
         foreach (var item in timers)
+        {
             item.gameObject.SetActive(false);
-    }
-
-    private Sprite LoadSprite(string spriteName)
-    {
-        return Resources.Load<Sprite>(spriteName);
+        }
+        for (int i = 0; i < isBaking.Length; i++)
+        {
+            isBaking[i] = false;
+            if (bakingCoroutines[i] != null)
+            {
+                StopCoroutine(bakingCoroutines[i]);
+            }
+            if (burningCoroutines[i] != null)
+            {
+                StopCoroutine(burningCoroutines[i]);
+            }
+        }
     }
 
     private void Update()
@@ -93,6 +111,11 @@ public class CookieManager : MonoBehaviour
         {
             currentActiveOutline.enabled = false;
         }
+    }
+
+    private Sprite LoadSprite(string spriteName)
+    {
+        return Resources.Load<Sprite>(spriteName);
     }
 
     public void OnClickDoughC()
@@ -106,7 +129,7 @@ public class CookieManager : MonoBehaviour
                     images[i].gameObject.SetActive(true);
                     images[i].sprite = prefabDoughC;
                     images[i].tag = "Untagged";
-                    if(GameManager.instance.soundEffect)
+                    if (GameManager.instance.soundEffect)
                     {
                         audioSource.PlayOneShot(doughSound);
                     }
@@ -114,8 +137,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-
-        return;
     }
 
     public void OnClickDoughB()
@@ -129,7 +150,7 @@ public class CookieManager : MonoBehaviour
                     images[i].gameObject.SetActive(true);
                     images[i].sprite = prefabDoughB;
                     images[i].tag = "Untagged";
-                    if(GameManager.instance.soundEffect)
+                    if (GameManager.instance.soundEffect)
                     {
                         audioSource.PlayOneShot(doughSound);
                     }
@@ -137,8 +158,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-
-        return;
     }
 
     public void OnClickDoughA()
@@ -153,15 +172,13 @@ public class CookieManager : MonoBehaviour
                     images[i].sprite = prefabDoughA;
                     images[i].tag = "Untagged";
                     if (GameManager.instance.soundEffect)
-                    { 
+                    {
                         audioSource.PlayOneShot(doughSound);
                     }
                     break;
                 }
             }
         }
-
-        return;
     }
 
     public void OnClickToppingCa()
@@ -175,7 +192,7 @@ public class CookieManager : MonoBehaviour
                 {
                     images[i].sprite = LoadSprite(images[i].sprite.name + value);
                     images[i].tag = cookieTag;
-                    if(GameManager.instance.soundEffect)
+                    if (GameManager.instance.soundEffect)
                     {
                         audioSource.PlayOneShot(toppingSound);
                     }
@@ -183,7 +200,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        return;
     }
 
     public void OnClickToppingCb()
@@ -205,7 +221,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        return;
     }
 
     public void OnClickToppingBa()
@@ -227,7 +242,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        return;
     }
 
     public void OnClickToppingBb()
@@ -249,7 +263,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        return;
     }
 
     public void OnClickToppingAa()
@@ -271,7 +284,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        return;
     }
 
     public void OnClickToppingAb()
@@ -293,7 +305,6 @@ public class CookieManager : MonoBehaviour
                 }
             }
         }
-        return;
     }
 
     public void OnClickTrash()
@@ -308,7 +319,6 @@ public class CookieManager : MonoBehaviour
                 tableimage.tag = "Untagged";
             }
         }
-        return;
     }
 
     public void OnClickTableA()
@@ -340,14 +350,27 @@ public class CookieManager : MonoBehaviour
                             if (!ovenImage[i].gameObject.activeSelf && foundImage.tag == cookieTag && !timers[i].gameObject.activeSelf)
                             {
                                 tempImage = foundImage;
-                                StartCoroutine(StartTimer(i, ovenImage[i], tempImage));
+
+                                // 기존 코루틴이 실행 중이면 중지
+                                if (bakingCoroutines[i] != null)
+                                {
+                                    StopCoroutine(bakingCoroutines[i]);
+                                }
+                                if (burningCoroutines[i] != null)
+                                {
+                                    StopCoroutine(burningCoroutines[i]);
+                                }
+
+                                // 코루틴 시작 및 상태 갱신
+                                bakingCoroutines[i] = StartCoroutine(StartTimer(i, ovenImage[i], tempImage));
+                                isBaking[i] = true;
                                 break;
                             }
                         }
                     }
                     else
                     {
-                        buttonImage.color = Color.white;
+                        // buttonImage.color = Color.white;
                     }
                 }
             }
@@ -453,13 +476,14 @@ public class CookieManager : MonoBehaviour
                 yield return null;
             }
 
-            timers[index].value -= (30+ GameManager.instance.ovenSpeed) * Time.deltaTime;
+            timers[index].value -= (30 + GameManager.instance.ovenSpeed) * Time.deltaTime;
             yield return null;
         }
 
         timers[index].gameObject.SetActive(false);
-        ovenImage.gameObject.SetActive(true);
-        StartCoroutine(StartBurnt(index, ovenImage));
+        isBaking[index] = false;
+
+        burningCoroutines[index] = StartCoroutine(StartBurnt(index, ovenImage));
     }
 
     private IEnumerator StartBurnt(int index, Image ovenImage)
@@ -478,17 +502,21 @@ public class CookieManager : MonoBehaviour
                 yield return null;
             }
 
-            burntTimer[index].value -= 30  * Time.deltaTime;
+            burntTimer[index].value -= 30 * Time.deltaTime;
             yield return null;
         }
+
         ovenImage.sprite = burntCookie;
         burntTimer[index].gameObject.SetActive(false);
     }
 
     public void EmptyTableImage()
     {
-        tableimage.sprite = null;
-        tableimage.tag = "Untagged";
-        tableimage.gameObject.SetActive(false);
+        if (tableimage != null)
+        {
+            tableimage.sprite = null;
+            tableimage.tag = "Untagged";
+            tableimage.gameObject.SetActive(false);
+        }
     }
 }
