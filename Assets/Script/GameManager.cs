@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         tax = 0;
         bgmValue = 1f;
-
+        totalMoney = 99999;
         PlayMainBGM();
 
         LoadGameData();
@@ -336,6 +336,7 @@ public class GameManager : MonoBehaviour
     public void ResetPlayerPrefs()
     {
         PlayerPrefs.DeleteAll();
+        LoadGameData();
         PlayerPrefs.Save();
     }
 
@@ -381,7 +382,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            totalMoney = 0;
+            totalMoney = 99999;
         }
 
         if (PlayerPrefs.HasKey("currRepute"))

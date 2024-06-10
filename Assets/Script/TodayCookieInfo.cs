@@ -20,7 +20,7 @@ public class TodayCookieInfo : MonoBehaviour
         }
         if (PlayerPrefs.HasKey("day"))
         {
-            day = PlayerPrefs.GetInt("day");
+            day = PlayerPrefs.GetInt("day") + 1;
         }
         else
         {
@@ -30,7 +30,7 @@ public class TodayCookieInfo : MonoBehaviour
         GameManager.instance.SetStageTimer(day);
         currentStage = GameManager.instance.stage;
 
-        StageData stageData = StageDataLoad.instance.GetStageData(currentStage - 1);
+        StageData stageData = StageDataLoad.instance.GetStageData(currentStage-1);
         if (stageData != null)
         {
             int cookieStart = stageData.cookieStart;
@@ -44,10 +44,6 @@ public class TodayCookieInfo : MonoBehaviour
                 images[count].sprite = cookies[i];
                 count++;
             }
-        }
-        else
-        {
-            //gameObject.SetActive(false);
         }
     }
 

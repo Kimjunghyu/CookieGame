@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class CookieManager : MonoBehaviour
 {
@@ -115,7 +116,10 @@ public class CookieManager : MonoBehaviour
 
     private Sprite LoadSprite(string spriteName)
     {
-        return Resources.Load<Sprite>(spriteName);
+        spriteName = spriteName.Trim();
+        Sprite sprite = Resources.Load<Sprite>(spriteName);
+
+        return sprite;
     }
 
     public void OnClickDoughC()
@@ -181,127 +185,45 @@ public class CookieManager : MonoBehaviour
         }
     }
 
-    public void OnClickToppingCa()
+    private string GetCookieImage(string doughID, string toppingID)
     {
-        value = 1;
-        if (isPlaying)
+        List<CookieData> cookieItems = CookieDataLoad.instance.GetCookieItems();
+        foreach (CookieData item in cookieItems)
         {
-            for (int i = 0; i < images.Length; i++)
+            if (item.Ing1ID == doughID && item.Ing2ID == toppingID)
             {
-                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
-                {
-                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
-                    images[i].tag = cookieTag;
-                    if (GameManager.instance.soundEffect)
-                    {
-                        audioSource.PlayOneShot(toppingSound);
-                    }
-                    break;
-                }
+                return item.CookieImage;
             }
         }
+        return null;
     }
 
-    public void OnClickToppingCb()
+    public void OnClickTopping()
     {
-        value = 2;
         if (isPlaying)
         {
-            for (int i = 0; i < images.Length; i++)
+            GameObject clickedButton = EventSystem.current.currentSelectedGameObject;
+            if (clickedButton != null)
             {
-                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                Image buttonImage = clickedButton.GetComponent<Image>();
+                if (buttonImage != null)
                 {
-                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
-                    images[i].tag = cookieTag;
-                    if (GameManager.instance.soundEffect)
+                    string toppingID = buttonImage.sprite.name;
+                    for (int i = 0; i < images.Length; i++)
                     {
-                        audioSource.PlayOneShot(toppingSound);
+                        if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
+                        {
+                            string doughID = images[i].sprite.name;
+                            var cookieName = GetCookieImage(doughID, toppingID);
+                            images[i].sprite = LoadSprite(cookieName);
+                            images[i].tag = cookieTag;
+                            if (GameManager.instance.soundEffect)
+                            {
+                                audioSource.PlayOneShot(toppingSound);
+                            }
+                            break;
+                        }
                     }
-                    break;
-                }
-            }
-        }
-    }
-
-    public void OnClickToppingBa()
-    {
-        value = 3;
-        if (isPlaying)
-        {
-            for (int i = 0; i < images.Length; i++)
-            {
-                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
-                {
-                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
-                    images[i].tag = cookieTag;
-                    if (GameManager.instance.soundEffect)
-                    {
-                        audioSource.PlayOneShot(toppingSound);
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    public void OnClickToppingBb()
-    {
-        value = 4;
-        if (isPlaying)
-        {
-            for (int i = 0; i < images.Length; i++)
-            {
-                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
-                {
-                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
-                    images[i].tag = cookieTag;
-                    if (GameManager.instance.soundEffect)
-                    {
-                        audioSource.PlayOneShot(toppingSound);
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    public void OnClickToppingAa()
-    {
-        value = 5;
-        if (isPlaying)
-        {
-            for (int i = 0; i < images.Length; i++)
-            {
-                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
-                {
-                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
-                    images[i].tag = cookieTag;
-                    if (GameManager.instance.soundEffect)
-                    {
-                        audioSource.PlayOneShot(toppingSound);
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    public void OnClickToppingAb()
-    {
-        value = 6;
-        if (isPlaying)
-        {
-            for (int i = 0; i < images.Length; i++)
-            {
-                if (images[i].gameObject.activeSelf && images[i].tag != cookieTag)
-                {
-                    images[i].sprite = LoadSprite(images[i].sprite.name + value);
-                    images[i].tag = cookieTag;
-                    if (GameManager.instance.soundEffect)
-                    {
-                        audioSource.PlayOneShot(toppingSound);
-                    }
-                    break;
                 }
             }
         }
@@ -351,7 +273,6 @@ public class CookieManager : MonoBehaviour
                             {
                                 tempImage = foundImage;
 
-                                // 기존 코루틴이 실행 중이면 중지
                                 if (bakingCoroutines[i] != null)
                                 {
                                     StopCoroutine(bakingCoroutines[i]);
@@ -360,17 +281,11 @@ public class CookieManager : MonoBehaviour
                                 {
                                     StopCoroutine(burningCoroutines[i]);
                                 }
-
-                                // 코루틴 시작 및 상태 갱신
                                 bakingCoroutines[i] = StartCoroutine(StartTimer(i, ovenImage[i], tempImage));
                                 isBaking[i] = true;
                                 break;
                             }
                         }
-                    }
-                    else
-                    {
-                        // buttonImage.color = Color.white;
                     }
                 }
             }
